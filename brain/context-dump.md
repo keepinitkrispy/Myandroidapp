@@ -1,6 +1,6 @@
 # Brain Context Dump
 
-Generated: 2026-03-06 06:21 UTC
+Generated: 2026-03-06 06:28 UTC
 Paste this entire file into the Claude Project knowledge base.
 It auto-regenerates whenever brain/ files are updated.
 
@@ -139,6 +139,25 @@ Status: ACTIVE THREAD — DAY 6
 - Al Jazeera — war powers resolution, Vahidi appointment, B-2 strikes
 
 
+
+
+
+### BBC Middle East
+Iran's high-risk war strategy seems to centre on endurance and deterrence
+Iran school and nearby military base struck multiple times, satellite image reveals
+Iran targets headquarters of Iranian Kurdish forces in Iraq
+Checkpoints everywhere and internet blackouts: Life in Iran as US-Israeli strikes intensify
+US sub sinks Iranian warship in Indian Ocean, Hegseth says
+How depleted weapons stockpiles could affect the Iran conflict
+### Al Jazeera
+Iran targets Israeli embassy in Bahrain, Saudi Arabia intercepts missile
+US House joins Senate to vote down war powers resolution
+How US sinking of Iranian warship blew hole in Modi’s ‘guardian’ claims
+Who is Ahmad Vahidi, the IRGC’s new commander?
+US says Iran missile attacks down 90% after strikes from B-2 bombers
+Iran war live: Military academy among locations hit by US, Israeli attacks
+
+*Auto-fetched by session-start hook. Claude: synthesize these into the Current situation section above and remove this block.*
 
 ---
 
