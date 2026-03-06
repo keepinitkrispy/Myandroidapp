@@ -13,7 +13,6 @@ TIMESTAMP=$(date +"%Y-%m-%d %H:%M UTC")
 FILES=(
     "$REPO_ROOT/CLAUDE.md"
     "$BRAIN/threads/open-questions.md"
-    "$BRAIN/threads/iran-war.md"
     "$BRAIN/threads/oliver.md"
 )
 
@@ -33,13 +32,7 @@ FILES=(
             continue
         fi
 
-        # Strip raw fetched-headlines blocks before including iran-war.md
-        # (those are transient and should never land in the context dump)
-        if [[ "$f" == *"iran-war.md" ]]; then
-            sed '/^---$/{N; /^---\n## Fetched headlines/,/^\*Auto-fetched/d}' "$f"
-        else
-            cat "$f"
-        fi
+        cat "$f"
 
         echo ""
         echo ""
