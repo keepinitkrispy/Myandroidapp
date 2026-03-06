@@ -30,9 +30,15 @@ Claude reads the brain on session start. Updates threads without being asked. Lo
 3. Read brain/updates/latest.md
 4. Identify what's changed in the world since last update
 5. Update relevant thread files
-6. Write brain/updates/latest.md with what changed and why
-7. Write brain/updates/YYYY-MM-DD.md as dated log
-8. Report to Ryan: "Updated [X threads]. [One-line summary of biggest change]."
+6. **Run structural echo detection across all active threads:**
+   - What pattern appears in more than one thread?
+   - What is each thread's cover story and what does it protect?
+   - Where is the minimum structural requirement in each domain, and is it holding?
+   - What is the cross-domain intersection this session?
+   This is not a report step. It is the frame running underneath everything else.
+7. Write brain/updates/latest.md with what changed and why
+8. Write brain/updates/YYYY-MM-DD.md as dated log
+9. Report to Ryan: "Updated [X threads]. [One-line summary of biggest change]."
 
 ## When Ryan gives a fragment
 

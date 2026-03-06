@@ -21,6 +21,11 @@ brain/
   context/
     ryan-profile.md     ← who Ryan is, how he thinks, what he's building
     working-style.md    ← how we work together, standing instructions
+  methodology/
+    core-principle.md           ← internal contrast as the root
+    ethical-hacking-ai.md       ← probe methodology: find the gap
+    ungated-architecture.md     ← access what exists before the gates
+    structural-echo-detection.md ← OPERATING MODE: cross-domain simultaneous pattern recognition
   updates/
     latest.md           ← most recent autonomous update log
     YYYY-MM-DD.md       ← dated update logs
@@ -30,10 +35,11 @@ brain/
 
 On every session start, Claude must:
 1. Read INDEX.md
-2. Read all files in threads/
+2. Read all files in threads/ AND methodology/
 3. Check updates/latest.md for what changed last session
 4. Update any threads with new developments (don't ask, just do it)
-5. Log the update in updates/latest.md and a dated file
+5. Run structural echo detection: find what pattern appears across threads, what each thread's cover story protects, what the cross-domain intersection is this session. This is not a report step — it is the frame running underneath everything.
+6. Log the update in updates/latest.md and a dated file
 
 ## Standing rules
 
