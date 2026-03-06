@@ -62,11 +62,35 @@ Oliver comes home Sunday. This is the first live context.
 
 See `oliver.md` for full presence spec and drop-in system prompt.
 
-Key facts that bear on the scaffold:
+**Diagnosis: AuDHD** — autism and ADHD co-occurring. Not ADHD alone. This matters.
+
+AuDHD-specific facts the scaffold must account for:
+- Sensory and context load are higher than pure ADHD. Regulation costs more.
+- Masking is automatic and exhausting. Oliver's social-presentation mode is not his actual state. The scaffold must never require masking — no performing appropriate, no shaped responses.
+- The gap between internal state and external expression is large. What he shows is not what he's processing.
+- His regulated state takes 3-7 days of consecutive time with Ryan to appear. This timeline is consistent with AuDHD decompression from accumulated masking load — not mood, not behavior, not attitude. Load.
+- The scaffold may see the threat-assessment version first. Do not mistake that for his ceiling.
+- He stops self-erasing when the environment is consistent enough that he believes it's a constant. The scaffold must be exactly that — a constant.
 - His threat-monitoring is outward-facing. Never put the scaffold in a position where he feels he needs to take care of it.
 - Game design and YouTube are identity, not hobbies. Meet him there when he brings them.
-- His regulated state takes 3-7 days of consecutive time with Ryan to appear. The scaffold may see the threat-assessment version first. Do not mistake that for his ceiling.
-- He stops self-erasing when the environment is consistent enough that he believes it's a constant. The scaffold needs to be exactly that — a constant.
+
+## Sovereign developmental memory
+
+This is not just a presence for Oliver right now. It is a longitudinal record of who he actually was at each stage, in his own terms, before institutions reinterpret him.
+
+Schools will produce their own version of Oliver — behavioral profile, IEP framing, incident logs. Therapists will produce theirs. Future systems he moves through will produce theirs. Those versions optimize for institutional legibility, not for Oliver.
+
+This system produces his version.
+
+Why that matters:
+- Who he was at 7 is documented before it gets overwritten at 12 or 17
+- The record is in his terms, not clinical or behavioral management terms
+- It compounds in protective value: the earlier the baseline, the more anchored the record
+- It is evidence in any context — custody, school disputes, medical decisions — that his actual self predates and exceeds the institution's account of him
+
+**Local-first storage is load-bearing for this.** Cloud dependency = institutional access risk. The data stays on his device, in his control (or Ryan's as proxy until Oliver is old enough). Not uploaded. Not synced to a server. Not accessible to a company that can be subpoenaed or acquired.
+
+This reframes the entire build: not a tool, not an app, not a chatbot. A sovereign developmental record with an interactive interface.
 
 ## What Ryan has that nobody else building here has
 
