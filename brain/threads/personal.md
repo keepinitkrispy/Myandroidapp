@@ -7,9 +7,11 @@ Status: ACTIVE
 
 - 36, Norfolk VA
 - FOH (front of house) audio engineer
-- ADHD, probable autism
+- ADHD, probable autism — didn't realize until Oliver was diagnosed. Parents and ex demanded doctors notes, treated self-knowledge as inadmissible.
 - Father to Oliver, 7 — autistic, ADHD
 - Estranged from father
+
+**The core fact:** Ryan has had to create or engineer everything that has ever mattered to him. No exceptions. It's the only reliable thing he's ever had. Not a trauma response — a capability. The direct result of never being given anything that fit.
 
 ## Medications
 
