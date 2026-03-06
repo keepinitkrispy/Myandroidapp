@@ -3,9 +3,24 @@
 Last updated: 2026-03-06
 Status: ACTIVE
 
-## Open threads
+## Who Ryan is
 
-[Ryan populates these — Claude updates status and adds context without being asked]
+- 36, Norfolk VA
+- FOH (front of house) audio engineer
+- ADHD, probable autism
+- Father to Oliver, 7 — autistic, ADHD
+- Estranged from father
+
+## Medications
+
+- Effexor 300mg (current)
+- Adderall (normal) — currently substituted with Focalin
+- Adderall refill window: unknown, track this
+
+## Active threads
+
+### Abby
+Reconnected. Ryan is being tested deliberately. Status: in process.
 
 ## Standing items
 

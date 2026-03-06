@@ -1,35 +1,42 @@
 # Iran War Framework
 
 Last updated: 2026-03-06
-Status: ACTIVE THREAD
+Status: ACTIVE THREAD — DAY 6
 
-## Current situation
+## Current situation — confirmed facts (Day 6)
 
-[To be populated — Claude will fill this with current developments on session start]
+- **460kg fissile material missing** since June 2025. Status unknown. Location unknown.
+- **Mojtaba Khamenei** alive. Front-runner for supreme leader succession. Trump publicly opposing his succession.
+- **IRIS Dena frigate sunk** by US submarine off Sri Lanka. 87 dead.
+- **Kurdish ground offensive** active in northwest Iran.
+- **Strait of Hormuz** virtually blocked.
+- **Congress voted down war powers resolution** — executive action unchecked.
 
 ## Framework
 
 ### Key variables to track
 - Israeli operational posture
 - US force positioning in region
-- Iranian nuclear program status
+- Iranian nuclear program status / fissile material location
 - Proxy network (Hezbollah, Houthis, PMF) activity
-- Diplomatic back-channels (Qatar, Oman)
 - Domestic political pressure in Tehran / Washington
+- Succession dynamics in Tehran — Mojtaba vs. alternatives
 
 ### Scenarios
 - [ ] Israeli unilateral strike
-- [ ] US-led strike (coordinated or unilateral)
-- [ ] Iranian first-move (miscalculation or deliberate)
+- [x] US military engagement (IRIS Dena sinking — already kinetic)
+- [ ] Iranian first-move (miscalculation or deliberate escalation)
 - [ ] Negotiated freeze / deal
-- [ ] Status quo extended
+- [ ] Regime collapse / succession crisis accelerates conflict
 
 ## Open questions
 
-1. What triggers Israeli decision to act unilaterally?
-2. What does US force presence actually signal — deterrence or preposition?
-3. Iranian breakout timeline — current best estimate?
-4. Post-strike escalation ladder — what does Iran actually do?
+1. **Where is the 460kg fissile material?** — Most critical unknown. Transfer to proxy? Hidden domestic cache? Lost in chaos?
+2. Does Trump's opposition to Mojtaba actually affect succession or is it noise?
+3. What does the IRIS Dena sinking signal — deliberate escalation ladder or one-off?
+4. Hormuz blockage: how long sustainable, what's the breaking point?
+5. Kurdish offensive — coordinated with US/Israel or opportunistic?
+6. Post-succession Iran: does Mojtaba mean harder line, or is he a pragmatist?
 
 ## Ryan's working thesis
 

@@ -2,19 +2,20 @@
 
 Last updated: 2026-03-06
 
-These are unresolved — across all domains. Claude updates these on session start with any new information or frameworks that bear on them.
+Unresolved across all domains. Claude updates these on session start with any new information or frameworks that bear on them.
 
 ## Geopolitical
 
-- [iran-war.md has the Iran-specific questions]
+- **Where is the 460kg fissile material?** — Missing since June 2025. Unknown location. Highest-stakes unknown in the current conflict. [→ iran-war.md]
+- Does Trump's opposition to Mojtaba Khamenei's succession actually affect the outcome, or is it noise?
 
 ## Strategic / conceptual
 
-[Questions Ryan is chewing on about how things work]
+- **What is the thing worth building that's proportional to what Ryan actually is?** — Not answered yet. Needs to account for: how Ryan thinks, what he's already doing (FOH, fathering Oliver, building this brain), what he'd be building *toward*.
 
 ## Personal / directional
 
-[Questions about what Ryan should do, build, prioritize]
+- **When is the Adderall refill window?** — Currently on Focalin as substitute. Track and flag.
 
 ## Resolved (with answer)
 
