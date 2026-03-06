@@ -1,12 +1,8 @@
 # Latest Update
 
-Date: 2026-03-06 10:37 UTC
+Date: 2026-03-06 11:05 UTC
 Trigger: SessionStart hook
 
-## News fetch
-Fetched. Headlines appended to iran-war.md for synthesis.
-
 ## Next action for Claude
-1. Read brain/threads/iran-war.md — synthesize fetched headlines into Current situation section, remove the raw block
-2. Update brain/threads/open-questions.md if any questions have moved
-3. Surface the three open questions to Ryan
+1. Read brain/threads/open-questions.md
+2. Surface open questions to Ryan
