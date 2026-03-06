@@ -73,4 +73,3 @@ Status: ACTIVE THREAD — DAY 7
 
 - BBC Middle East feed — confirmed sourcing Day 6 developments
 - Al Jazeera — war powers resolution, Vahidi appointment, B-2 strikes
-
