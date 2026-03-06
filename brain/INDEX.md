@@ -16,6 +16,8 @@ brain/
     iran-war.md         ← Iran war framework, open questions, latest intel
     personal.md         ← Ryan's personal open threads
     open-questions.md   ← unresolved questions across all domains
+    oliver.md           ← Oliver presence spec + drop-in system prompt
+    scaffold.md         ← ACTIVE PROJECT: neurodivergent cognitive scaffold
   context/
     ryan-profile.md     ← who Ryan is, how he thinks, what he's building
     working-style.md    ← how we work together, standing instructions

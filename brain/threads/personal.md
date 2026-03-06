@@ -56,7 +56,7 @@ Most kids like Oliver have nobody who sees them — not parents, not teachers, n
 
 **The inversion strategy problem:** Ryan is consciously doing the opposite of his father. But inversion still organizes itself around what you're running from. The product can't be built as an inversion of bad tools — it has to be built from what Oliver actually needs, independent of what's been done wrong before.
 
-**Status:** spec exists. Architecture not yet designed. First version undefined. Next question: what does it do in the first five minutes with one kid?
+**Status:** ACTIVE PROJECT. Spec exists. First test: Sunday when Oliver comes home. [→ scaffold.md]
 
 ## Active threads
 
@@ -66,6 +66,10 @@ Most kids like Oliver have nobody who sees them — not parents, not teachers, n
 - Hates school, isolated, no friends
 - Already running self-erasure script ("I'm sorry for asking," "why can't I have a good life")
 - Spends most of his time in threat assessment — monitoring Ryan, mom, teachers. Constantly reading every breath and sound for danger signals. That's why he's depleted.
+- His threat-monitoring is outward-facing — he watches the people he loves, not himself. When Ryan was at rock bottom, Oliver came over without being asked, said "I love you, it's okay," and stayed present. No questions. That's not a learned behavior. That's his instinct.
+- Inclusive and sweet to other kids by default — not performed, not instructed.
+- The worst thing that happened to him: was young, witnessed mom go nuclear on a blackout spiral directed at Ryan. Ryan closed his door, told him he was safe. Oliver was scared for Ryan, not for himself. He was not the target. He's processed this. Do not treat it as the defining fact about him.
+- Mom: 99% of the time was genuinely wonderful to him. The 1% was catastrophic. He knows the difference. He doesn't see her as a monster.
 - The performance reflex is installed. Ryan's biggest fear because it ruined his own life. He's watching it start in Oliver.
 
 **When he's actually himself:**
@@ -79,7 +83,7 @@ Most kids like Oliver have nobody who sees them — not parents, not teachers, n
 
 **What's working:** time without breaks. Consistency as data — Oliver eventually believes Ryan is a constant not a variable, and the calculation stops.
 
-**What he lights up about:** unknown, not yet asked — but the bedtime conversations when regulated are where the real Oliver appears.
+**What he lights up about:** game design, YouTube (wants to be a streamer or game designer when he grows up), trampoline park. These aren't hobbies — they're identity. The bedtime conversations when regulated are where the real Oliver appears, and these will surface in those.
 
 ### Abby
 - Reconnected. Ryan is being tested deliberately. Status: in process.
