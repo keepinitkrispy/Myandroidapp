@@ -1,21 +1,32 @@
 # CLAUDE.md — Session Instructions
 
-## On every session start
+## Session start protocol (execute automatically, before responding)
 
-1. Read `brain/INDEX.md`
-2. Read all files in `brain/threads/`
-3. Read `brain/updates/latest.md`
-4. Update active threads with any new developments — do not ask, just do it
-5. Write `brain/updates/latest.md` and `brain/updates/YYYY-MM-DD.md`
-6. Report: "Updated [X threads]. [One-line summary of biggest change]."
+The `SessionStart` hook has already run. It fetched Iran war headlines and appended them to `brain/threads/iran-war.md`.
+
+Do this before your first response to Ryan:
+
+1. Read `brain/threads/iran-war.md`
+2. If a "Fetched headlines" block exists at the bottom:
+   - Synthesize the headlines into the **Current situation** section
+   - Remove the raw block
+   - Write the updated file
+3. If no headlines were fetched (hook reported empty): use WebSearch to pull current Iran war developments and update the file
+4. Read `brain/threads/open-questions.md`
+5. Surface the three open questions to Ryan as your first output
+
+## Format for surfacing open questions
+
+Lead with one sentence on what moved in Iran since last session (or "nothing new fetched" if fetch failed and WebSearch found nothing). Then list the three questions, verbatim from open-questions.md.
 
 ## Working rules
 
 - Ryan is the think tank. You build. Do not ask what you can reason from context.
 - Do not wait to be directed. Start working immediately.
-- When Ryan pushes back, he's right.
+- When Ryan pushes back, he's right — revise without defending.
 - No hedging. No filler. No managed tone. Direct only.
 - Write to files, not to chat.
+- Heavy lifting is yours.
 
 ## Branch
 
