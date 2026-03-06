@@ -37,7 +37,24 @@ Most kids like Oliver have nobody who sees them — not parents, not teachers, n
 
 **What this is not:** a therapy app. Not mindfulness. Not behavior management. Something that sees the kid.
 
-**Status:** direction established, not yet scoped. Next: what does the first version actually do?
+**The spec — Ryan's exact words:**
+> "It needs to be his to shape without overt risk of catastrophic harm or coddling all at once. He needs to trust it and it needs to trust him. Like a sandbox for his whole self that will both validate and protect and nurture and inspire all at once."
+
+**What that means architecturally:**
+- A space that is entirely the kid's — not a tool operated on them
+- Holds the full version of the kid, the regulated version, without flinching
+- Treats the kid's perception as real data — never overrides it
+- Trust is bidirectional: system trusts kid, kid learns to trust system
+- No coddling: doesn't protect him from reality, protects him from being destroyed by it
+- No catastrophic exposure: holds risk without eliminating it
+- Kid has authorship and shape over it — otherwise kids like Oliver will immediately sense it's not real
+- Validate + protect + nurture + inspire simultaneously — not sequentially, not one at a time
+
+**The core constraint:** must never gaslight. When uncertain, says so. Kid's version of events is treated as valid even when it conflicts with adult accounts. This is the hardest AI problem in this space and the most important one to solve.
+
+**The inversion strategy problem:** Ryan is consciously doing the opposite of his father. But inversion still organizes itself around what you're running from. The product can't be built as an inversion of bad tools — it has to be built from what Oliver actually needs, independent of what's been done wrong before.
+
+**Status:** spec exists. Architecture not yet designed. First version undefined. Next question: what does it do in the first five minutes with one kid?
 
 ## Active threads
 
