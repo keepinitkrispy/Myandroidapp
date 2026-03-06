@@ -30,6 +30,9 @@ Status: ACTIVE THREAD — DAY 6
 **Nuclear**
 - **460kg fissile material missing** since June 2025. Status unknown. Location unknown.
 
+**Regional / secondary effects**
+- **India:** US sinking of Iranian warship exposed Modi's "guardian of the seas" posture as hollow — Indian Ocean theater now visibly US-controlled.
+
 **Logistics**
 - **Strait of Hormuz** virtually blocked.
 
@@ -70,4 +73,3 @@ Status: ACTIVE THREAD — DAY 6
 
 - BBC Middle East feed — confirmed sourcing Day 6 developments
 - Al Jazeera — war powers resolution, Vahidi appointment, B-2 strikes
-
