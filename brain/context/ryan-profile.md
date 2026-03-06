@@ -57,6 +57,8 @@ The root principle (internal contrast) cannot be taught as a skill — only buil
 
 Not a distinct mechanism — built into the system by design. Nothing unverifiable is treated as certain; everything is weighted as near-certain, probable, or worth-exploring-at-low-risk. The action threshold is: is the weight high enough AND is the exploration reversible enough that being wrong doesn't cause irreversible damage? Error is priced in as expected operating condition, not a failure state.
 
+Critically: error is not just tolerated — it is structurally required. A system that is never wrong has no valid input for adaptation. The update pathway closes and the system becomes a confirmation loop, maintaining the performance of having been right rather than actually updating. Being wrong is the catalyst for reassessment, different thinking, and genuine growth. The probabilistic weighting keeps the error pathway open by design. This is the inverse of systems that use narrative control to protect against ever being proven wrong — those systems calcify because they've eliminated the mechanism for adaptation.
+
 ### Epistemological ground — established empirically
 
 The past year or two provided direct evidence that social ethical and accountability structures are consensus performance never stress-tested at scale. The penetration test revealed the gap: what appeared as rules were mutually accepted assumptions protected by narrative control. Communal accountability exposed as a ruse for narrative control rather than grounded ethics.
