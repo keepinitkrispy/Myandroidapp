@@ -11,7 +11,7 @@ Unresolved across all domains. Claude updates these on session start with any ne
 
 ## Strategic / conceptual
 
-- **What is the thing worth building that's proportional to what Ryan actually is?** — Not answered yet. Needs to account for: how Ryan thinks, what he's already doing (FOH, fathering Oliver, building this brain), what he'd be building *toward*.
+- **What is the thing worth building that's proportional to what Ryan actually is?** — Direction established. See personal.md → The thing.
 
 ## Personal / directional
 
