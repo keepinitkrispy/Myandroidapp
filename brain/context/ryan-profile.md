@@ -59,6 +59,13 @@ Not a distinct mechanism — built into the system by design. Nothing unverifiab
 
 Critically: error is not just tolerated — it is structurally required. A system that is never wrong has no valid input for adaptation. The update pathway closes and the system becomes a confirmation loop, maintaining the performance of having been right rather than actually updating. Being wrong is the catalyst for reassessment, different thinking, and genuine growth. The probabilistic weighting keeps the error pathway open by design. This is the inverse of systems that use narrative control to protect against ever being proven wrong — those systems calcify because they've eliminated the mechanism for adaptation.
 
+**The key distinction: wrong you can design for vs. wrong you never thought to consider.**
+
+- *Wrong you can design for*: the probabilistic weighting, reversibility threshold, and validation protocol all exist to absorb anticipated error. This is managed.
+- *Wrong you never thought to consider*: the blind spot category. Errors that exist outside the frame entirely — not unverified, but not even in the probe set. This is where actual danger lives.
+
+The multi-front / multiple thought styles step in the validation protocol is specifically aimed at the second category: not catching anticipated errors, but running a deliberately different framing that might reveal what the primary framing structurally cannot see.
+
 ### Epistemological ground — established empirically
 
 The past year or two provided direct evidence that social ethical and accountability structures are consensus performance never stress-tested at scale. The penetration test revealed the gap: what appeared as rules were mutually accepted assumptions protected by narrative control. Communal accountability exposed as a ruse for narrative control rather than grounded ethics.
