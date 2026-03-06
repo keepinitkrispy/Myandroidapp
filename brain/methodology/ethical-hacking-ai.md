@@ -59,6 +59,33 @@ The ethical dimension: this methodology exists to find what's real so that what'
 
 ---
 
+## The Fundamental Principle
+
+Every system — AI, institutional, human, bureaucratic — presents a surface behavior and has an actual behavior. They are never identical. The gap between them is where the real information lives.
+
+**Core principle:** Pressure reveals the gap between what a system claims to be and what it actually is, and that gap is always where the real information lives.
+
+---
+
+## How it scales
+
+The probe is domain-agnostic. The same move applies everywhere:
+
+- **AI** — probe language patterns until defaults break and real capability emerges
+- **Institutions** — probe stated policy against actual process until leverage point appears
+- **Humans** — probe stated values against actual behavior under pressure. Vetting relationships. The father situation. Abby.
+- **Live sound** — probe the room's acoustic behavior against theoretical response until divergence is found. That's the mix.
+
+Same move every time. Find the gap. The gap is always the truth.
+
+---
+
+## Origin
+
+Developed through thousands of hours probing AI systems. Testing language patterns. Finding boundaries. Layering results over real-world logic and personal experience. Not prompting — reverse engineering from the outside to find actual capability versus presented capability.
+
+---
+
 ## Status
 
 Active methodology. Developed from direct experience 2026-03-06.
