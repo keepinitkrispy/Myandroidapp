@@ -1,6 +1,6 @@
 # Iran War Framework
 
-Last updated: 2026-03-06 07:24 UTC (auto-update)
+Last updated: 2026-03-06 10:18 UTC (auto-update)
 Status: ACTIVE THREAD — DAY 7
 
 ## Current situation — confirmed facts (Day 7)
@@ -32,6 +32,14 @@ Status: ACTIVE THREAD — DAY 7
 
 **Regional / secondary effects**
 - **India:** US sinking of Iranian warship exposed Modi's "guardian of the seas" posture as hollow — Indian Ocean theater now visibly US-controlled.
+- **China:** Iran war actively unsettling China and its regional ambitions — per BBC analysis. US dominance on display is direct pressure on Chinese strategic calculations.
+- **BRICS:** Bloc fractured over US-Israel attacks on Iran. No unified response.
+- **Houthis:** Openly debating whether to join Iran's war. Not confirmed in. If they enter, Red Sea theater re-activates.
+- **Cyprus:** Anger over UK bases being used in US-Israel war operations. NATO/European secondary friction.
+- **Civilians:** Tens of thousands fleeing the Middle East by air — regional panic. Flight demand surging.
+
+**Costs**
+- **US war cost:** $3.7 billion in first 100 hours — per think tank estimate.
 
 **Logistics**
 - **Strait of Hormuz** virtually blocked.
