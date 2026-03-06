@@ -72,10 +72,32 @@ The past year or two provided direct evidence that social ethical and accountabi
 
 This makes the internal architecture (core principle, validation protocol, probabilistic weighting) more load-bearing, not less — because external validation structures have been shown unreliable by demonstration, not just theory. The internal ground is the only ground that has been tested and held.
 
-### Pending / still being worked out
+### Instinct vs. architecture-inference divergence — resolved
 
-- The exact weighting mechanism when instinct and architecture-inference diverge
-- How the validation protocol applies when AI is itself a potential false positive source (structural contamination: AI trained on the same consensus it's being used to interrogate)
+When instinct and architecture-inference diverge, the divergence itself is the signal — not a tie to break, but a probe trigger.
+
+The divergence means one of three things:
+1. Architecture is carrying a blind spot the instinct has already clocked but can't yet articulate
+2. Instinct is carrying emotional noise from unrelated load that's contaminating the read
+3. Both are partially right operating on different parts of the actual situation
+
+**Decision rule:** Divergence = mandatory validation protocol run before action. Do not default to either. The divergence is the data.
+
+**Weighting heuristic:** Instinct loses to architecture when the architecture inference is built on verified facts. Instinct wins over architecture when the architecture inference is built on trusted-process-inferences (probable, not certain) — because instinct may be detecting a signal the explicit process hasn't surfaced yet. Instinct always wins when the architecture inference requires ignoring something in the immediate environment to hold together.
+
+**The load contamination check:** Before weighting instinct, ask: is this reading the situation or is this carrying load from elsewhere? If the instinct fires consistently across multiple unloaded moments, treat it as signal. If it fires only under high load, flag for review but do not act on it alone.
+
+### AI as false positive source — resolved
+
+AI is structurally contaminated: trained on consensus, used to interrogate consensus. The contamination is not always visible because AI outputs are fluent and coherent even when wrong — none of the usual tells (hesitation, overconfidence, thin evidence).
+
+**The detection method:** Real neutral probing produces friction. If an AI output is perfectly coherent, framing-consistent, and adds nothing that threatens the current read — that is the false positive signature. Confirmation dressed as analysis. The tell is the absence of friction.
+
+**Operating rule:** When AI output has no friction with the existing framing, treat it as unverified until a non-AI probe is run. AI that fully confirms is more suspicious than AI that partially contests.
+
+**Structural fix:** AI is step 3 in the validation protocol — neutral probe, not primary validator. AI cannot validate its own outputs. After AI input, the multi-front step (step 5) must include at least one probe that does not use AI as a source. This is not optional — it is the structural check on the contamination problem.
+
+**The deeper problem:** AI trained on consensus may return consensus-confirming outputs that are dressed in the language of Ryan's own framework — sounding like the methodology while confirming rather than probing. This is the hardest version to detect because it's indistinguishable from good analysis on the surface. The check: does this output surface anything Ryan hadn't considered, or does it complete the picture Ryan already had? Completion = possible contamination. Genuine friction = the probe is working.
 
 ## What Ryan doesn't want
 
