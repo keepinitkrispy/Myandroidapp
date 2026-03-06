@@ -46,8 +46,21 @@ Most kids like Oliver have nobody who sees them — not parents, not teachers, n
 - Destabilized at mom's house, wants to be at Ryan's constantly
 - Hates school, isolated, no friends
 - Already running self-erasure script ("I'm sorry for asking," "why can't I have a good life")
-- Does not talk about his mind or how he thinks
-- What he lights up about: unknown, not yet asked
+- Spends most of his time in threat assessment — monitoring Ryan, mom, teachers. Constantly reading every breath and sound for danger signals. That's why he's depleted.
+- The performance reflex is installed. Ryan's biggest fear because it ruined his own life. He's watching it start in Oliver.
+
+**When he's actually himself:**
+- Takes 3-7 days of consecutive time with Ryan, away from school, for his nervous system to stand down
+- Happens most reliably at bedtime — performance takes energy he doesn't have left
+- In those moments: lighter, grounded, unguarded, curious, asking profound things, not afraid
+- Ryan's description: "like he's a real person, not a kid pretending to be a kid"
+- Zero friction. Oliver stops monitoring Ryan's every signal. The threat calculation stops.
+
+**What breaks it:** custody split sends him back to mom's house, resets nervous system to high alert. Decompression has to start over.
+
+**What's working:** time without breaks. Consistency as data — Oliver eventually believes Ryan is a constant not a variable, and the calculation stops.
+
+**What he lights up about:** unknown, not yet asked — but the bedtime conversations when regulated are where the real Oliver appears.
 
 ### Abby
 - Reconnected. Ryan is being tested deliberately. Status: in process.
