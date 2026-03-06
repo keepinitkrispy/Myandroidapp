@@ -1,6 +1,6 @@
 # Brain Context Dump
 
-Generated: 2026-03-06 07:24 UTC
+Generated: 2026-03-06 07:34 UTC
 Paste this entire file into the Claude Project knowledge base.
 It auto-regenerates whenever brain/ files are updated.
 
@@ -67,7 +67,7 @@ Unresolved across all domains. Claude updates these on session start with any ne
 
 # Iran War Framework
 
-Last updated: 2026-03-06 06:33 UTC (auto-update)
+Last updated: 2026-03-06 07:24 UTC (auto-update)
 Status: ACTIVE THREAD — DAY 7
 
 ## Current situation — confirmed facts (Day 7)
@@ -142,24 +142,6 @@ Status: ACTIVE THREAD — DAY 7
 - Al Jazeera — war powers resolution, Vahidi appointment, B-2 strikes
 
 
-
-
-### BBC Middle East
-Iran's high-risk war strategy seems to centre on endurance and deterrence
-Iran school and nearby military base struck multiple times, satellite image reveals
-Iran targets headquarters of Iranian Kurdish forces in Iraq
-Checkpoints everywhere and internet blackouts: Life in Iran as US-Israeli strikes intensify
-US sub sinks Iranian warship in Indian Ocean, Hegseth says
-How depleted weapons stockpiles could affect the Iran conflict
-### Al Jazeera
-Tehran hit by heavy bombing on day seven of US-Israel war on Iran
-Iran war: What is happening on day seven of US-Israel attacks?
-Iran targets Israeli embassy in Bahrain, Saudi Arabia intercepts missile
-US House joins Senate to vote down war powers resolution
-How US sinking of Iranian warship blew hole in Modi’s ‘guardian’ claims
-Who is Ahmad Vahidi, the IRGC’s new commander?
-
-*Auto-fetched by session-start hook. Claude: synthesize these into the Current situation section above and remove this block.*
 
 ---
 
