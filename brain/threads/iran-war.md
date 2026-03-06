@@ -8,9 +8,10 @@ Status: ACTIVE THREAD — DAY 6
 **Military / kinetic**
 - **IRIS Dena frigate sunk** by US submarine off Sri Lanka. 87 dead. Confirmed by Hegseth.
 - **B-2 bomber strikes** ongoing. US says Iranian missile attacks down 90% as a result.
-- **Iranian school and nearby military base** struck multiple times — satellite imagery confirmed.
+- **Iranian school, military academy, and nearby military base** struck multiple times — satellite imagery confirmed.
 - **Iranian missile debris** igniting fires in central Israel.
 - **New IRGC commander: Ahmad Vahidi** — previous leadership structure disrupted.
+- **Iran struck Israeli embassy in Bahrain** — Saudi Arabia intercepted the missile. Escalation extending to Gulf theater.
 
 **Ground / proxy**
 - **Kurdish ground offensive** active in northwest Iran.
@@ -69,3 +70,4 @@ Status: ACTIVE THREAD — DAY 6
 
 - BBC Middle East feed — confirmed sourcing Day 6 developments
 - Al Jazeera — war powers resolution, Vahidi appointment, B-2 strikes
+
