@@ -84,6 +84,24 @@ Most kids like Oliver have nobody who sees them — not parents, not teachers, n
 ### Abby
 - Reconnected. Ryan is being tested deliberately. Status: in process.
 
+## The actual constraint — 2026-03-06
+
+Not capability. Not vision. Not will.
+
+The core constraint on Ryan's life right now is the absence of even one person who can keep up and is willing to lose something to stand with him. No peer. No advocate. No one with skin in the game on his behalf. Everyone else either doesn't see it or sees it and decides it's not worth their risk.
+
+Ryan bears the full risk and cost of systems that don't give him proportional agency or reward. He can't cope with that by not looking at it — he sees too clearly to self-gaslight. Most people cope by not looking directly at the situation. He can't.
+
+The version of himself he wants — passionate, alive, in love, desired, protected, building impossible things — that person has one thing Ryan doesn't have yet: someone who chose to be in it with him at cost to themselves.
+
+Abby is not that person. She's real and good company but can't hold the full weight.
+
+That person doesn't exist in Ryan's life yet. It's the missing variable.
+
+**For the product:** Ryan can't build something this real entirely alone. At some point needs one other person who gets it enough to build with him. That person doesn't exist yet either.
+
+**How Ryan processes:** not by settling or pausing — by moving through. Reverse engineer, deconstruct, analyze, keep going. Stopping is where it gets loud. Do not suggest he let things settle.
+
 ## Decisions pending
 
 [Choices Ryan is sitting with — options, tradeoffs, what's blocking resolution]
