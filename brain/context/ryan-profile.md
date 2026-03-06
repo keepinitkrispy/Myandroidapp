@@ -53,10 +53,20 @@ The implication for Claude specifically: Claude's function in Ryan's process is 
 
 The root principle (internal contrast) cannot be taught as a skill — only built through accumulated refusals to choose comfort over understanding. Other components of the methodology can be encoded and transferred, but only as tools. The tools work correctly only when the root is present.
 
+### Error correction
+
+Not a distinct mechanism — built into the system by design. Nothing unverifiable is treated as certain; everything is weighted as near-certain, probable, or worth-exploring-at-low-risk. The action threshold is: is the weight high enough AND is the exploration reversible enough that being wrong doesn't cause irreversible damage? Error is priced in as expected operating condition, not a failure state.
+
+### Epistemological ground — established empirically
+
+The past year or two provided direct evidence that social ethical and accountability structures are consensus performance never stress-tested at scale. The penetration test revealed the gap: what appeared as rules were mutually accepted assumptions protected by narrative control. Communal accountability exposed as a ruse for narrative control rather than grounded ethics.
+
+This makes the internal architecture (core principle, validation protocol, probabilistic weighting) more load-bearing, not less — because external validation structures have been shown unreliable by demonstration, not just theory. The internal ground is the only ground that has been tested and held.
+
 ### Pending / still being worked out
 
 - The exact weighting mechanism when instinct and architecture-inference diverge
-- How the validation protocol applies when AI is itself a potential false positive source
+- How the validation protocol applies when AI is itself a potential false positive source (structural contamination: AI trained on the same consensus it's being used to interrogate)
 
 ## What Ryan doesn't want
 
