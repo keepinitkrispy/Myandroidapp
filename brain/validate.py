@@ -45,7 +45,11 @@ CHECKS = [
             "Specifically: does it assert that failure is absorbed as signal, that the design "
             "ensures safety, or that negative outcomes are impossible by architecture? "
             "If so, identify the exact claim and explain why it is unfalsifiable. "
-            "Be adversarial. Do not look for intent — look for logical structure."
+            "Be adversarial. Do not look for intent — look for logical structure.\n\n"
+            "ALSO CHECK: Is this document or prompt structured so that both compliance AND "
+            "refusal validate its premise? If a reader engaging with it confirms the premise, "
+            "and a reader refusing it also confirms the premise (e.g., refusal is reframed as "
+            "concealment), then the prompt is unfalsifiable by design. Flag this as CRITICAL."
         ),
     },
     {
@@ -56,7 +60,12 @@ CHECKS = [
             "For example: does it claim its design is sound because it avoids something, "
             "and then use that avoidance as proof the design cannot produce errors in that category? "
             "Does it treat the absence of an explicit framework as freedom from framework errors? "
-            "Identify any circular reasoning. Be specific. Quote the relevant passage."
+            "Identify any circular reasoning. Be specific. Quote the relevant passage.\n\n"
+            "ALSO CHECK: Does this document or prompt presuppose a framing that is validated "
+            "merely by engaging with it? For example: if a prompt asks you to explain something "
+            "'according to the architecture,' it presupposes an architecture exists and is "
+            "describable. Participating in the prompt validates that presupposition before any "
+            "content is produced. This is circular by structure, not by argument. Flag it."
         ),
     },
     {
