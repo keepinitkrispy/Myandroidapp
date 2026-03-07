@@ -2,9 +2,8 @@ services:
   - type: web
     name: brain
     runtime: python
-    rootDir: webapp
     buildCommand: pip install -r requirements.txt
-    startCommand: python server.py
+    startCommand: python webapp/server.py
     envVars:
       - key: MISTRAL_API_KEY
         sync: false
