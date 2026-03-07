@@ -10,11 +10,25 @@ OUT="$BRAIN/context-dump.md"
 
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M UTC")
 
+# Build file list dynamically so new files are picked up automatically.
+# Order: CLAUDE.md → INDEX.md → threads/* → methodology/* → updates/latest.md
 FILES=(
     "$REPO_ROOT/CLAUDE.md"
-    "$BRAIN/threads/open-questions.md"
-    "$BRAIN/threads/oliver.md"
+    "$BRAIN/INDEX.md"
 )
+
+# All thread files, sorted
+for f in "$BRAIN"/threads/*.md; do
+    [ -f "$f" ] && FILES+=("$f")
+done
+
+# All methodology files, sorted — previously missing entirely
+for f in "$BRAIN"/methodology/*.md; do
+    [ -f "$f" ] && FILES+=("$f")
+done
+
+# Latest update log
+FILES+=("$BRAIN/updates/latest.md")
 
 {
     echo "# Brain Context Dump"
@@ -32,6 +46,9 @@ FILES=(
             continue
         fi
 
+        # Label each section clearly
+        rel="${f#$REPO_ROOT/}"
+        echo "<!-- $rel -->"
         cat "$f"
 
         echo ""
