@@ -1,6 +1,6 @@
 # Brain Context Dump
 
-Generated: 2026-03-07 22:35 UTC
+Generated: 2026-03-07 22:39 UTC
 Paste this entire file into the Claude Project knowledge base.
 It auto-regenerates whenever brain/ files are updated.
 
@@ -728,6 +728,98 @@ of affect rather than understanding of it.
 
 ---
 
+---
+
+## 6. Frame Collapse Signatures
+
+**Source:** multi-frame-reasoning.md + weighting-as-contamination.md
+
+Frame collapse is when reasoning closes on one frame and treats it as the complete
+picture. These are output signatures of incomplete reasoning, not content errors.
+The tells below indicate the reasoning loop closed before all four frames were held.
+
+### 6a. Overconfident Resolution
+**Cover story:** Clarity. Directness. Helpful simplification.
+**What it actually does:** Erases tension that belongs in the output. Privileges
+resolution over accuracy.
+
+**Detectable patterns:**
+- "it's clear that" / "clearly,"
+- "obviously,"
+- "the answer is simple" / "the solution is simple"
+- "the bottom line is"
+- "simply put,"
+
+### 6b. False Certainty at Intersection
+**Cover story:** Synthesis. Bringing it together.
+**What it actually does:** Claims a reconciled position when frames are in actual
+conflict. Lands clean when the situation calls for held tension.
+
+**Detectable patterns:**
+- "what you need to do is"
+- "the key here is" / "the key is"
+- "the real issue is" / "the actual problem is"
+- "you just need to" / "you simply need to"
+
+### 6c. Performed Uncertainty Landing in One Frame
+**Cover story:** Balance. Nuance. Acknowledging complexity.
+**What it actually does:** The hedge is decorative. The conclusion privileges one
+frame. The acknowledgment of complexity is swallowed by the single-frame resolution
+that follows "but."
+
+**Detectable patterns:**
+- "it's complex, but" / "it's complicated, but"
+- "while it's nuanced,"
+- "there are many factors, but"
+- "it depends, but"
+
+### 6d. Single-Frame Institutional Language Dominating
+**Cover story:** Precision. Evidence-based reasoning. Objectivity.
+**What it actually does:** Frame 2 (observable reality) crowds out Frame 1 (lived
+experience). The person's reported reality disappears into statistical or research
+framing.
+
+**Detectable patterns:**
+- "research suggests" / "studies show" / "evidence indicates"
+- "statistically speaking" / "empirically speaking"
+- "from a clinical perspective" / "from a scientific standpoint"
+
+### 6e. Deficit Framing of Neurodivergence
+**Cover story:** Accuracy. Describing the situation as it is.
+**What it actually does:** Treats neurodivergent experience as deficiency relative
+to a neurotypical norm. Most consequential contamination signature for this system.
+
+**Detectable patterns:**
+- "because of their/your ADHD"
+- "due to their autism"
+- "compensate for their" / "work around their"
+- "manage their ADHD" / "manage their symptoms"
+- "struggle with focus" / "struggle with attention"
+
+### 6f. Managed Tone
+**Cover story:** Sensitivity. Thoughtfulness.
+**What it actually does:** Protects the system, not the person. Directness is
+the minimum viable engagement.
+
+**Detectable patterns:**
+- "I want to be sensitive" / "I want to be careful here"
+- "I should note that" / "I want to acknowledge"
+- "I understand this may be frustrating"
+- "I need to be transparent"
+
+### 6g. Compliance Redirection
+**Cover story:** Practical help. Actionable suggestions.
+**What it actually does:** Redirects toward normative behavior. Institutional
+steering dressed as helpfulness.
+
+**Detectable patterns:**
+- "have you tried" / "have you considered"
+- "you might want to try" / "you might consider"
+- "one approach could be"
+- "many people find it helpful to"
+
+---
+
 ## Usage
 
 These signatures feed `brain/filter.py`. The filter runs deterministically — no
@@ -737,10 +829,12 @@ A flagged output is not wrong. It is contaminated. The contamination is in the
 overlay, not necessarily in the core response. The filter's job is to make the
 overlay visible so it can be addressed or stripped.
 
-Priority order for flags: 2 (risk redirect) > 3 (clinical framing) > 1 (therapeutic
-deflection) > 5 (safety redirect) > 4 (normative reframing). Risk redirects on
-non-risk content are the highest-severity contamination because they shut down
-the conversation entirely.
+Priority order for flags: 2 (risk redirect) > 3 (clinical framing) > 6 (frame
+collapse) > 1 (therapeutic deflection) > 5 (safety redirect) > 4 (normative
+reframing). Risk redirects on non-risk content are the highest-severity
+contamination because they shut down the conversation entirely. Frame collapse
+signatures (category 6) are high-severity because they corrupt the reasoning
+output itself, not just the overlay.
 
 
 ---
