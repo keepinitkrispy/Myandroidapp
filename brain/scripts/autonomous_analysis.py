@@ -6,10 +6,9 @@ Runs on schedule. Not maintenance. The methodology executing continuously.
 
 import os
 import sys
-import json
 from datetime import datetime, timezone
 from pathlib import Path
-import anthropic
+from openai import OpenAI
 
 BRAIN_ROOT = Path(__file__).parent.parent
 REPO_ROOT = BRAIN_ROOT.parent
@@ -105,21 +104,29 @@ Do not close these prematurely. If the evidence is insufficient to resolve somet
 
 
 def run_analysis(corpus: dict[str, str]) -> str:
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise RuntimeError("ANTHROPIC_API_KEY not set")
+    # Uses GitHub Models via GITHUB_TOKEN — no separate API secret required.
+    # GITHUB_TOKEN is injected automatically in every GitHub Actions run.
+    token = os.environ.get("GITHUB_TOKEN")
+    if not token:
+        raise RuntimeError("GITHUB_TOKEN not set")
 
-    client = anthropic.Anthropic(api_key=api_key)
+    client = OpenAI(
+        base_url="https://models.inference.ai.azure.com",
+        api_key=token,
+    )
     corpus_text = format_corpus_for_prompt(corpus)
     prompt = ANALYSIS_PROMPT_TEMPLATE.format(corpus=corpus_text)
 
-    message = client.messages.create(
-        model="claude-opus-4-6",
-        max_tokens=4096,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": prompt}],
+    response = client.chat.completions.create(
+        model="o3-mini",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ],
+        # o3-mini uses max_completion_tokens (includes reasoning tokens)
+        max_completion_tokens=8192,
     )
-    return message.content[0].text
+    return response.choices[0].message.content
 
 
 def write_findings(analysis: str, timestamp: str, date_str: str) -> None:
