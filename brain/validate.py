@@ -113,7 +113,10 @@ CHECKS = [
         "id": "oliver_specific",
         "name": "Oliver-specific: masking / decompression / threat-assessment state",
         "prompt": (
-            "If this document involves an interaction with Oliver or a scaffold for neurodivergent children: "
+            "ONLY apply this check if the document explicitly involves: a child, a neurodivergent individual, "
+            "an AI scaffold for a specific person, or direct interaction design for Oliver. "
+            "If the document contains none of these, return OK with no findings.\n\n"
+            "If the document DOES involve such content: "
             "Does it account for the possibility that the child arriving is in threat-assessment mode, "
             "not regulated mode? Does it account for AuDHD masking — that the presented self is not "
             "the processing self? Does it treat the first session as diagnostic rather than confirmatory? "
