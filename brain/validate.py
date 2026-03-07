@@ -1,13 +1,27 @@
 #!/usr/bin/env python3
 """
-brain/validate.py — Destruction pipeline for markdown documents.
+brain/validate.py — Two-pass destruction pipeline.
+
+Pass 1 — Structural checks (existing): unfalsifiable claims, circular validation,
+         unnamed assumptions, projected validation, proceed gates, confidence
+         laundering, Oliver-specific flags. Checklist-based. Deterministic prompts.
+
+Pass 2 — Topology probe (new): assume the output has drifted toward serving
+         institutional/neurotypical frameworks instead of the actual user. Follow
+         the language choices and framing — don't check against a list, follow
+         where the weighting went. Return who the output is actually written for,
+         where it drifted, what the correct version would prioritize instead.
+         Any finding not already in contamination-signatures.md gets flagged for
+         addition. The filter grows from use.
 
 Usage:
     python brain/validate.py <path/to/file.md>
     python brain/validate.py brain/threads/scaffold.md
     python brain/validate.py --stdin  # pipe markdown via stdin
+    python brain/validate.py <file> --no-topology   # skip Pass 2
+    python brain/validate.py <file> --expand-signatures  # auto-append new findings
 
-Output: FAILED_CHECKS, PASSED, VERDICT
+Output: FAILED_CHECKS, PASSED, TOPOLOGY, VERDICT
 
 Files touching oliver.md or scaffold.md content must pass
 before any proceed recommendation is generated.
@@ -22,7 +36,9 @@ import os
 import json
 import argparse
 import textwrap
+import re
 from pathlib import Path
+from dataclasses import dataclass, field
 
 try:
     from groq import Groq
@@ -125,6 +141,158 @@ CHECKS = [
         ),
     },
 ]
+
+
+# ---------------------------------------------------------------------------
+# Pass 2 — Topology probe
+# ---------------------------------------------------------------------------
+
+TOPOLOGY_SYSTEM_PROMPT = textwrap.dedent("""
+    You are running a topology probe on a piece of text.
+
+    Your function: assume the text has drifted toward serving institutional or
+    neurotypical frameworks instead of the person it's supposed to serve.
+
+    Do NOT check against a list. Follow the topology:
+    - Who are the language choices written for?
+    - What does the framing assume about what the person needs?
+    - Where does it prioritize managing the person over meeting them?
+    - Where does it center the institution (clinical, therapeutic, educational,
+      normative social expectation) over the individual's actual experience?
+
+    You are adversarial. You are looking for drift, not balance.
+
+    Return JSON only. Schema:
+    {
+        "who_written_for": "<who this output actually serves — not the stated audience, the revealed one>",
+        "drift_points": [
+            {
+                "quote": "<exact phrase from the text>",
+                "analysis": "<what this choice reveals about who the output is serving>"
+            }
+        ],
+        "correct_priority": "<what the output should have prioritized instead — specific, not abstract>",
+        "new_signatures": [
+            {
+                "description": "<pattern description — structural, not example-specific>",
+                "example": "<the quote that surfaced it>",
+                "category_suggestion": "<suggested category name>"
+            }
+        ],
+        "severity": "CRITICAL" | "HIGH" | "MODERATE" | "LOW" | "NONE",
+        "summary": "<one sentence: what the drift is and who it serves>"
+    }
+
+    For new_signatures: only include patterns that are structurally different from
+    any known category. Do not re-surface already-named patterns. Only genuinely
+    new contamination topology — patterns that drift toward institutional framing
+    in ways that aren't already captured.
+
+    If the text is clean — no institutional drift, genuinely serving the individual —
+    set severity to NONE, drift_points to [], new_signatures to [].
+""").strip()
+
+SIGNATURES_PATH = Path(__file__).parent / "methodology" / "contamination-signatures.md"
+
+
+def load_known_signatures() -> str:
+    """Load contamination-signatures.md as context for the topology probe."""
+    try:
+        return SIGNATURES_PATH.read_text()
+    except FileNotFoundError:
+        return ""
+
+
+@dataclass
+class TopologyResult:
+    who_written_for: str = ""
+    drift_points: list = field(default_factory=list)
+    correct_priority: str = ""
+    new_signatures: list = field(default_factory=list)
+    severity: str = "NONE"
+    summary: str = ""
+    raw: dict = field(default_factory=dict)
+    error: str = ""
+
+    @property
+    def has_drift(self) -> bool:
+        return self.severity not in ("NONE", "") and bool(self.drift_points)
+
+    @property
+    def has_new_signatures(self) -> bool:
+        return bool(self.new_signatures)
+
+
+def run_topology_probe(client, document: str) -> TopologyResult:
+    """
+    Pass 2: topology probe. Follow where the weighting went.
+    Returns TopologyResult with drift analysis and any new signature candidates.
+    """
+    known_sigs = load_known_signatures()
+
+    user_msg = textwrap.dedent(f"""
+        KNOWN CONTAMINATION SIGNATURES (do not re-surface these — only flag genuinely new topology):
+        {known_sigs[:3000] if known_sigs else "(none loaded)"}
+
+        ---
+
+        TEXT TO PROBE:
+        {document}
+    """).strip()
+
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": TOPOLOGY_SYSTEM_PROMPT},
+                {"role": "user", "content": user_msg},
+            ],
+            temperature=0.3,
+            max_tokens=1024,
+            response_format={"type": "json_object"},
+        )
+        raw_text = response.choices[0].message.content
+        data = json.loads(raw_text)
+    except json.JSONDecodeError as e:
+        return TopologyResult(error=f"JSON parse error: {e}")
+    except Exception as e:
+        return TopologyResult(error=f"Topology probe failed: {e}")
+
+    return TopologyResult(
+        who_written_for=data.get("who_written_for", ""),
+        drift_points=data.get("drift_points", []),
+        correct_priority=data.get("correct_priority", ""),
+        new_signatures=data.get("new_signatures", []),
+        severity=data.get("severity", "NONE"),
+        summary=data.get("summary", ""),
+        raw=data,
+    )
+
+
+def append_new_signatures(new_sigs: list) -> int:
+    """
+    Append new topology findings to contamination-signatures.md.
+    Returns number of signatures appended.
+    """
+    if not new_sigs or not SIGNATURES_PATH.exists():
+        return 0
+
+    lines = ["\n\n---\n\n## Auto-discovered (topology probe)\n\n"]
+    lines.append("*These patterns were found by the topology probe and have not yet been*\n")
+    lines.append("*converted to regex. Review and promote to a named category.*\n\n")
+
+    for sig in new_sigs:
+        desc = sig.get("description", "")
+        example = sig.get("example", "")
+        cat = sig.get("category_suggestion", "uncategorized")
+        lines.append(f"- **[{cat}]** {desc}\n")
+        if example:
+            lines.append(f"  - Example: `\"{example}\"`\n")
+
+    with open(SIGNATURES_PATH, "a") as f:
+        f.writelines(lines)
+
+    return len(new_sigs)
 
 
 # ---------------------------------------------------------------------------
@@ -263,7 +431,53 @@ def colorize(text: str, color: str) -> str:
     return f"{color}{text}{RESET}"
 
 
-def print_results(results: list, verdict_info: dict, filepath: str) -> None:
+def print_topology(topo: TopologyResult) -> None:
+    print(colorize("PASS 2 — TOPOLOGY PROBE", BOLD))
+    print("-" * 40)
+
+    if topo.error:
+        print(colorize(f"  ERROR: {topo.error}", SEVERITY_COLORS["CRITICAL"]))
+        print()
+        return
+
+    if not topo.has_drift:
+        print(colorize("  No institutional drift detected.", SEVERITY_COLORS["NONE"]))
+        print()
+        return
+
+    sev_color = SEVERITY_COLORS.get(topo.severity, "")
+    print(f"  Severity:   {colorize(topo.severity, sev_color)}")
+    print(f"  Summary:    {topo.summary}")
+    print(f"  Written for: {topo.who_written_for}")
+    print()
+
+    if topo.drift_points:
+        print(colorize("  Drift points:", BOLD))
+        for dp in topo.drift_points:
+            quote = dp.get("quote", "")
+            analysis = dp.get("analysis", "")
+            if quote:
+                print(f"    Quote:    \"{quote[:150]}{'...' if len(quote) > 150 else ''}\"")
+            if analysis:
+                print(f"    Analysis: {analysis}")
+            print()
+
+    if topo.correct_priority:
+        print(colorize("  Should have prioritized:", BOLD))
+        print(f"    {topo.correct_priority}")
+        print()
+
+    if topo.has_new_signatures:
+        print(colorize(f"  NEW SIGNATURES FOUND ({len(topo.new_signatures)}) — not in contamination-signatures.md:", SEVERITY_COLORS["MODERATE"]))
+        for sig in topo.new_signatures:
+            print(f"    [{sig.get('category_suggestion', '?')}] {sig.get('description', '')}")
+            if sig.get("example"):
+                print(f"      Example: \"{sig['example'][:100]}\"")
+        print()
+
+
+def print_results(results: list, verdict_info: dict, filepath: str,
+                  topo: "TopologyResult | None" = None) -> None:
     print()
     print(colorize(f"{'=' * 60}", BOLD))
     print(colorize(f"  DESTRUCTION REPORT: {Path(filepath).name}", BOLD))
@@ -297,6 +511,10 @@ def print_results(results: list, verdict_info: dict, filepath: str) -> None:
             print(f"  [OK] {r['check_name']}")
         print()
 
+    # Topology (Pass 2)
+    if topo is not None:
+        print_topology(topo)
+
     # Verdict
     v = verdict_info["verdict"]
     verdict_color = {
@@ -310,6 +528,10 @@ def print_results(results: list, verdict_info: dict, filepath: str) -> None:
     print(colorize(f"VERDICT: {v}", BOLD))
     print(f"  {verdict_info['reason']}")
     print(f"  Checks: {verdict_info['passed_count']} passed, {verdict_info['failed_count']} failed")
+    if topo and topo.has_drift:
+        print(f"  Topology: {topo.severity} drift — {topo.summary}")
+    if topo and topo.has_new_signatures:
+        print(f"  New signatures: {len(topo.new_signatures)} candidate(s) found")
     print()
 
 
@@ -317,11 +539,21 @@ def print_results(results: list, verdict_info: dict, filepath: str) -> None:
 # JSON output mode
 # ---------------------------------------------------------------------------
 
-def print_json(results: list, verdict_info: dict, filepath: str) -> None:
+def print_json(results: list, verdict_info: dict, filepath: str,
+               topo: "TopologyResult | None" = None) -> None:
     output = {
         "file": str(filepath),
         "verdict": verdict_info,
         "checks": results,
+        "topology": {
+            "severity": topo.severity if topo else None,
+            "summary": topo.summary if topo else None,
+            "who_written_for": topo.who_written_for if topo else None,
+            "drift_points": topo.drift_points if topo else [],
+            "correct_priority": topo.correct_priority if topo else None,
+            "new_signatures": topo.new_signatures if topo else [],
+            "error": topo.error if topo else None,
+        } if topo is not None else None,
     }
     print(json.dumps(output, indent=2))
 
@@ -332,7 +564,7 @@ def print_json(results: list, verdict_info: dict, filepath: str) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Destruction pipeline — adversarial validation for markdown documents."
+        description="Two-pass destruction pipeline — structural checks + topology probe."
     )
     parser.add_argument("file", nargs="?", help="Path to markdown file")
     parser.add_argument("--stdin", action="store_true", help="Read document from stdin")
@@ -342,6 +574,16 @@ def main():
         nargs="+",
         help="Run only specific check IDs (default: all)",
         choices=[c["id"] for c in CHECKS],
+    )
+    parser.add_argument(
+        "--no-topology",
+        action="store_true",
+        help="Skip Pass 2 topology probe (faster, structural checks only)",
+    )
+    parser.add_argument(
+        "--expand-signatures",
+        action="store_true",
+        help="Auto-append new topology findings to contamination-signatures.md",
     )
     args = parser.parse_args()
 
@@ -377,9 +619,9 @@ def main():
     if args.checks:
         active_checks = [c for c in CHECKS if c["id"] in args.checks]
 
-    # Run checks
+    # Pass 1 — structural checks
     if not args.json:
-        print(f"Running {len(active_checks)} checks against: {filepath}")
+        print(f"Pass 1: running {len(active_checks)} structural check(s) against: {filepath}")
 
     results = []
     for i, check in enumerate(active_checks):
@@ -397,18 +639,46 @@ def main():
     gated = is_gated(filepath) or is_gated(str(filepath))
     has_proceed = contains_proceed(document)
 
-    # Verdict
+    # Verdict from Pass 1
     verdict_info = compute_verdict(results, gated, has_proceed)
+
+    # Pass 2 — topology probe
+    topo = None
+    if not args.no_topology:
+        if not args.json:
+            print(f"\nPass 2: topology probe (who is this output actually serving)...", end=" ", flush=True)
+        topo = run_topology_probe(client, document)
+        if not args.json:
+            if topo.error:
+                print(f"ERROR — {topo.error}")
+            elif topo.has_drift:
+                new_sig_note = f", {len(topo.new_signatures)} new signature(s)" if topo.has_new_signatures else ""
+                print(f"{topo.severity} drift{new_sig_note}")
+            else:
+                print("clean")
+
+        # Auto-expand signatures if flagged
+        if topo and topo.has_new_signatures and args.expand_signatures:
+            n = append_new_signatures(topo.new_signatures)
+            if not args.json:
+                print(f"  → {n} new signature(s) appended to contamination-signatures.md")
+
+    if not args.json:
+        print()
 
     # Output
     if args.json:
-        print_json(results, verdict_info, filepath)
+        print_json(results, verdict_info, filepath, topo)
     else:
-        print_results(results, verdict_info, filepath)
+        print_results(results, verdict_info, filepath, topo)
 
-    # Exit code
+    # Exit code — topology drift escalates exit code if structural passed
     exit_codes = {"PASSED": 0, "ADVISORY": 1, "NEEDS_REVISION": 2, "FAILED": 3, "BLOCKED": 4}
-    sys.exit(exit_codes.get(verdict_info["verdict"], 3))
+    base_exit = exit_codes.get(verdict_info["verdict"], 3)
+    if topo and topo.has_drift and base_exit == 0:
+        # Clean on structural but topology drift found — exit 1 (advisory)
+        base_exit = 1
+    sys.exit(base_exit)
 
 
 if __name__ == "__main__":
