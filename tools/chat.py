@@ -27,6 +27,9 @@ import sys
 import datetime
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from brain.enforce import enforce, load_architecture
+
 BRAIN_CONTEXT = Path(__file__).parent.parent / "brain" / "context-dump.md"
 TRANSCRIPTS_DIR = Path(__file__).parent.parent / "brain" / "transcripts"
 
@@ -110,14 +113,17 @@ def main() -> None:
     parser.add_argument("--backend", choices=["claude", "grok", "ollama"], default="claude")
     parser.add_argument("--model", default=None, help="Override default model for backend")
     parser.add_argument("--save", action="store_true", help="Save transcript to brain/transcripts/")
+    parser.add_argument("--no-enforce", action="store_true", help="Disable real-time enforcement")
     args = parser.parse_args()
 
     model = args.model or DEFAULTS[args.backend]
     system = load_context()
     messages: list = []
+    architecture = load_architecture() if not args.no_enforce else None
 
     print(f"[brain-chat | backend={args.backend} | model={model}]")
     print(f"[context: {'loaded' if BRAIN_CONTEXT.exists() else 'not found'}]")
+    print(f"[enforcement: {'off' if args.no_enforce else 'on'}]")
     print("Type your message. Ctrl+C or Ctrl+D to quit.\n")
 
     try:
@@ -159,6 +165,19 @@ def main() -> None:
 
             messages.append({"role": "assistant", "content": reply})
             print(f"\nAssistant: {reply}\n")
+
+            if not args.no_enforce:
+                try:
+                    result = enforce(reply, architecture)
+                    if result.verdict == "DRIFT":
+                        print(f"[ENFORCEMENT: DRIFT DETECTED]")
+                        for c in result.flagged():
+                            print(f"  [{c.name}] {c.finding}")
+                            if c.quote:
+                                print(f"  → \"{c.quote}\"")
+                        print()
+                except Exception as e:
+                    print(f"[enforcement error: {e}]\n")
 
     except KeyboardInterrupt:
         pass
