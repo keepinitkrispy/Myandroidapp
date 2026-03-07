@@ -18,6 +18,7 @@
       --flag-med: #fa0;
       --flag-low: #88f;
       --clean: #3a3;
+      --drift: #f44;
     }
 
     html, body {
@@ -58,7 +59,27 @@
     #model-badge {
       font-size: 11px;
       color: var(--dim);
+    }
+
+    /* Debug toggle */
+    #debug-toggle {
       margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--dim);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #debug-toggle input[type="checkbox"] {
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    #debug-toggle.active {
+      color: var(--accent);
     }
 
     /* Response area */
@@ -90,6 +111,17 @@
       50% { opacity: 0; }
     }
 
+    /* Debug panel — hidden by default */
+    #debug-panel {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #debug-panel.visible {
+      display: flex;
+    }
+
     /* Filter status bar */
     #filter-bar {
       display: none;
@@ -113,7 +145,7 @@
       color: var(--flag-med);
     }
 
-    #filter-bar .filter-label {
+    .filter-label {
       font-weight: 600;
       letter-spacing: 0.05em;
     }
@@ -152,6 +184,111 @@
     .match-text {
       color: var(--text);
       opacity: 0.6;
+    }
+
+    /* Enforcement panel */
+    #enforcement-bar {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+    }
+
+    #enforcement-bar.clean {
+      display: flex;
+      border-color: var(--clean);
+      color: var(--clean);
+    }
+
+    #enforcement-bar.drift {
+      display: flex;
+      border-color: var(--drift);
+      color: var(--drift);
+    }
+
+    #enforcement-bar.error {
+      display: flex;
+      border-color: var(--border);
+      color: var(--dim);
+    }
+
+    .enforcement-label {
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    #enforcement-checks {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11px;
+      padding: 8px 10px;
+      background: #120d0d;
+      border: 1px solid var(--drift);
+      border-radius: 3px;
+    }
+
+    #enforcement-checks.visible {
+      display: flex;
+    }
+
+    .check-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #222;
+    }
+
+    .check-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .check-header {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .check-verdict {
+      font-weight: 600;
+      min-width: 36px;
+    }
+
+    .check-verdict.FLAG { color: var(--flag-high); }
+    .check-verdict.PASS { color: var(--clean); }
+
+    .check-name {
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .check-finding {
+      color: var(--dim);
+      padding-left: 44px;
+      font-style: italic;
+    }
+
+    .check-quote {
+      color: var(--flag-med);
+      padding-left: 44px;
+      opacity: 0.8;
+    }
+
+    /* shared toggle button style */
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+      margin-left: auto;
+      opacity: 0.7;
     }
 
     /* Input area */
@@ -266,20 +403,34 @@
   <header>
     <h1>Brain</h1>
     <span id="model-badge">mistral-large-latest</span>
+    <label id="debug-toggle">
+      <input type="checkbox" id="debug-checkbox" />
+      debug
+    </label>
   </header>
 
   <div id="response-area" class="empty">—</div>
 
-  <div id="filter-bar">
-    <span class="filter-label" id="filter-label"></span>
-    <span id="filter-summary-text"></span>
-    <button id="toggle-matches" style="
-      background:none;border:none;color:inherit;cursor:pointer;
-      font-family:inherit;font-size:11px;margin-left:auto;opacity:0.7;
-    ">details</button>
-  </div>
+  <!-- Debug panel: all pipeline diagnostics live here, hidden by default -->
+  <div id="debug-panel">
 
-  <div id="filter-matches"></div>
+    <!-- Pass 1: filter.py -->
+    <div id="filter-bar">
+      <span class="filter-label" id="filter-label"></span>
+      <span id="filter-summary-text"></span>
+      <button class="toggle-btn" id="toggle-matches">details</button>
+    </div>
+    <div id="filter-matches"></div>
+
+    <!-- Pass 2: enforce.py -->
+    <div id="enforcement-bar">
+      <span class="enforcement-label" id="enforcement-label"></span>
+      <span id="enforcement-summary-text"></span>
+      <button class="toggle-btn" id="toggle-checks">details</button>
+    </div>
+    <div id="enforcement-checks"></div>
+
+  </div>
 
   <div id="error-bar"></div>
 
@@ -298,25 +449,54 @@
   </div>
 
   <script>
-    const responseArea = document.getElementById('response-area');
-    const input = document.getElementById('input');
-    const submitBtn = document.getElementById('submit');
-    const speakBtn = document.getElementById('speak-btn');
-    const filterBar = document.getElementById('filter-bar');
-    const filterLabel = document.getElementById('filter-label');
+    const responseArea      = document.getElementById('response-area');
+    const input             = document.getElementById('input');
+    const submitBtn         = document.getElementById('submit');
+    const speakBtn          = document.getElementById('speak-btn');
+    const debugPanel        = document.getElementById('debug-panel');
+    const debugCheckbox     = document.getElementById('debug-checkbox');
+    const debugToggle       = document.getElementById('debug-toggle');
+    const filterBar         = document.getElementById('filter-bar');
+    const filterLabel       = document.getElementById('filter-label');
     const filterSummaryText = document.getElementById('filter-summary-text');
-    const filterMatches = document.getElementById('filter-matches');
-    const toggleMatches = document.getElementById('toggle-matches');
-    const errorBar = document.getElementById('error-bar');
-    const modelBadge = document.getElementById('model-badge');
+    const filterMatches     = document.getElementById('filter-matches');
+    const toggleMatches     = document.getElementById('toggle-matches');
+    const enforcementBar    = document.getElementById('enforcement-bar');
+    const enforcementLabel  = document.getElementById('enforcement-label');
+    const enforcementSummary= document.getElementById('enforcement-summary-text');
+    const enforcementChecks = document.getElementById('enforcement-checks');
+    const toggleChecks      = document.getElementById('toggle-checks');
+    const errorBar          = document.getElementById('error-bar');
+    const modelBadge        = document.getElementById('model-badge');
 
     let currentText = '';
     let speaking = false;
+    let debugMode = false;
+    let lastData = null;
 
     // Load model info
     fetch('/context').then(r => r.json()).then(d => {
       if (d.model) modelBadge.textContent = d.model;
     }).catch(() => {});
+
+    // Debug toggle
+    debugCheckbox.addEventListener('change', () => {
+      debugMode = debugCheckbox.checked;
+      debugToggle.classList.toggle('active', debugMode);
+      if (lastData) {
+        renderDebug(lastData);
+      }
+    });
+
+    function renderDebug(data) {
+      if (debugMode) {
+        debugPanel.classList.add('visible');
+        showFilter(data);
+        showEnforcement(data);
+      } else {
+        debugPanel.classList.remove('visible');
+      }
+    }
 
     // Submit on Cmd+Enter / Ctrl+Enter
     input.addEventListener('keydown', e => {
@@ -333,14 +513,20 @@
       toggleMatches.textContent = filterMatches.classList.contains('visible') ? 'hide' : 'details';
     });
 
+    toggleChecks.addEventListener('click', () => {
+      enforcementChecks.classList.toggle('visible');
+      toggleChecks.textContent = enforcementChecks.classList.contains('visible') ? 'hide' : 'details';
+    });
+
     async function submit() {
       const message = input.value.trim();
       if (!message) return;
 
       setLoading(true);
-      clearFilter();
+      clearDebug();
       clearError();
       stopSpeech();
+      lastData = null;
 
       try {
         const res = await fetch('/chat', {
@@ -357,7 +543,8 @@
         }
 
         showResponse(data.response);
-        showFilter(data);
+        lastData = data;
+        renderDebug(data);
         currentText = data.response;
         speakBtn.classList.add('visible');
 
@@ -374,26 +561,29 @@
     }
 
     function showFilter(data) {
-      if (data.flagged) {
-        filterBar.className = 'flagged';
-        filterLabel.textContent = 'FILTERED';
-        filterSummaryText.textContent = data.filter_summary;
+      const f = data.filter || {};
+      const flagged = f.flagged;
 
-        // Populate matches
+      if (flagged) {
+        filterBar.className = 'flagged';
+        filterLabel.textContent = 'PASS 1: FILTERED';
+        filterSummaryText.textContent = f.summary || '';
+
         filterMatches.innerHTML = '';
-        (data.filter_matches || []).forEach(m => {
+        (f.matches || []).forEach(m => {
           const div = document.createElement('div');
           div.className = 'match-item';
           div.innerHTML = `
             <span class="match-sev ${m.severity_label}">[${m.severity_label}]</span>
-            <span>${m.note}</span>
+            <span>${escHtml(m.note)}</span>
             <span class="match-text">"${escHtml(m.matched_text)}"</span>
           `;
           filterMatches.appendChild(div);
         });
+        toggleMatches.style.display = '';
       } else {
         filterBar.className = 'clean';
-        filterLabel.textContent = 'CLEAN';
+        filterLabel.textContent = 'PASS 1: CLEAN';
         filterSummaryText.textContent = '';
         filterMatches.innerHTML = '';
         filterMatches.classList.remove('visible');
@@ -401,13 +591,67 @@
       }
     }
 
-    function clearFilter() {
+    function showEnforcement(data) {
+      if (data.enforcement_error && !data.enforcement) {
+        enforcementBar.className = 'error';
+        enforcementLabel.textContent = 'PASS 2: SKIPPED';
+        enforcementSummary.textContent = data.enforcement_error;
+        enforcementChecks.innerHTML = '';
+        enforcementChecks.classList.remove('visible');
+        toggleChecks.style.display = 'none';
+        return;
+      }
+
+      const e = data.enforcement || {};
+      const verdict = e.verdict || 'UNKNOWN';
+      const flagged = e.flagged || [];
+
+      if (verdict === 'DRIFT' || flagged.length > 0) {
+        enforcementBar.className = 'drift';
+        enforcementLabel.textContent = 'PASS 2: DRIFT';
+        enforcementSummary.textContent = `${flagged.length} check(s) flagged`;
+      } else {
+        enforcementBar.className = 'clean';
+        enforcementLabel.textContent = 'PASS 2: CLEAN';
+        enforcementSummary.textContent = '';
+      }
+
+      // Full check breakdown
+      enforcementChecks.innerHTML = '';
+      (e.checks || []).forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'check-item';
+
+        let inner = `
+          <div class="check-header">
+            <span class="check-verdict ${c.verdict}">${c.verdict}</span>
+            <span class="check-name">${escHtml(c.name)}</span>
+          </div>
+        `;
+        if (c.finding && c.verdict === 'FLAG') {
+          inner += `<div class="check-finding">${escHtml(c.finding)}</div>`;
+        }
+        if (c.quote) {
+          inner += `<div class="check-quote">"${escHtml(c.quote)}"</div>`;
+        }
+        div.innerHTML = inner;
+        enforcementChecks.appendChild(div);
+      });
+
+      toggleChecks.style.display = (e.checks && e.checks.length) ? '' : 'none';
+    }
+
+    function clearDebug() {
       filterBar.className = '';
-      filterBar.style.display = 'none';
       filterMatches.innerHTML = '';
       filterMatches.classList.remove('visible');
       toggleMatches.style.display = '';
       toggleMatches.textContent = 'details';
+      enforcementBar.className = '';
+      enforcementChecks.innerHTML = '';
+      enforcementChecks.classList.remove('visible');
+      toggleChecks.style.display = '';
+      toggleChecks.textContent = 'details';
       speakBtn.classList.remove('visible');
     }
 
@@ -433,6 +677,7 @@
     }
 
     function escHtml(s) {
+      if (!s) return '';
       return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
@@ -459,7 +704,6 @@
       utter.pitch = 1.0;
       utter.volume = 1.0;
 
-      // Prefer a natural English voice if available
       const voices = synth.getVoices();
       const preferred = voices.find(v =>
         v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Neural') || v.localService)
@@ -488,7 +732,6 @@
       speakBtn.classList.remove('speaking');
     }
 
-    // Voices load async in some browsers
     if (synth && synth.onvoiceschanged !== undefined) {
       synth.onvoiceschanged = () => {};
     }
