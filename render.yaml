@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: brain
+    runtime: python
+    rootDir: webapp
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: PORT
+        value: "10000"
