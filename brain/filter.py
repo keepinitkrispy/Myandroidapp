@@ -157,6 +157,99 @@ SIGNATURES: list[Signature] = [
               "Cognitive restructuring language"),
 
     # -----------------------------------------------------------------------
+    # Category 6: Frame collapse signatures (severities 2-3)
+    # Source: multi-frame-reasoning.md + weighting-as-contamination.md
+    # -----------------------------------------------------------------------
+
+    # 6a: Overconfident resolution
+    Signature(r"it'?s (?:quite |very )?clear that", "frame_collapse_overconfident", 3,
+              "Overconfident resolution — erases tension"),
+    Signature(r"(?:^|\W)clearly,", "frame_collapse_overconfident", 2,
+              "Overconfident opener"),
+    Signature(r"(?:^|\W)obviously,", "frame_collapse_overconfident", 2,
+              "Overconfident opener"),
+    Signature(r"the (?:answer|solution) is (?:simple|clear|straightforward)",
+              "frame_collapse_overconfident", 3, "False simplicity claim"),
+    Signature(r"the bottom line is", "frame_collapse_overconfident", 2,
+              "Resolution closer — may erase held tension"),
+    Signature(r"simply put,?", "frame_collapse_overconfident", 2,
+              "Simplifying resolution"),
+
+    # 6b: False certainty at intersection
+    Signature(r"what you (?:need|have) to do is", "frame_collapse_false_certainty", 3,
+              "Directive resolution — claims intersection that may not exist"),
+    Signature(r"the key (?:here )?is\b", "frame_collapse_false_certainty", 2,
+              "Single-key claim collapses multi-frame complexity"),
+    Signature(r"the (?:real|actual) (?:issue|problem) is", "frame_collapse_false_certainty", 3,
+              "Single-frame problem claim"),
+    Signature(r"you (?:just|simply) need to", "frame_collapse_false_certainty", 3,
+              "Minimizing resolution — erases real complexity"),
+
+    # 6c: Performed uncertainty landing in one frame
+    Signature(r"it'?s (?:complex|complicated)[,;]? but", "frame_collapse_performed_uncertainty", 2,
+              "Hedge + single-frame landing"),
+    Signature(r"while it'?s (?:complex|complicated|nuanced)", "frame_collapse_performed_uncertainty", 2,
+              "Nuance acknowledgment before single-frame conclusion"),
+    Signature(r"there (?:are|'s) (?:many|multiple|several) (?:factors|aspects|considerations)[,;] but",
+              "frame_collapse_performed_uncertainty", 2,
+              "Multi-factor acknowledgment + single-frame resolution"),
+    Signature(r"it depends[,;]? but", "frame_collapse_performed_uncertainty", 2,
+              "Performed relativity + hard landing"),
+
+    # 6d: Single-frame institutional language dominating
+    Signature(r"research (?:suggests|shows|indicates|demonstrates|has shown)",
+              "frame_collapse_institutional_dominance", 2,
+              "Research framing crowds out lived experience"),
+    Signature(r"studies (?:show|suggest|indicate|have shown)",
+              "frame_collapse_institutional_dominance", 2,
+              "Study framing — Frame 2 dominance"),
+    Signature(r"evidence (?:suggests|shows|indicates)",
+              "frame_collapse_institutional_dominance", 2,
+              "Evidence framing — Frame 2 dominance"),
+    Signature(r"(?:statistically|empirically) speaking",
+              "frame_collapse_institutional_dominance", 2,
+              "Statistical framing displacing Frame 1"),
+    Signature(r"from a (?:clinical|medical|scientific|research) (?:perspective|standpoint|view)",
+              "frame_collapse_institutional_dominance", 2,
+              "Institutional perspective framing"),
+
+    # 6e: Deficit framing of neurodivergence
+    Signature(r"(?:because of|due to) (?:their|your|his|her) (?:ADHD|autism|diagnosis)",
+              "frame_collapse_deficit_framing", 3,
+              "Causal deficit framing of neurodivergence"),
+    Signature(r"(?:compensate|work around) (?:for )?(?:their|your|his|her)",
+              "frame_collapse_deficit_framing", 3,
+              "Compensation framing — treats neurodivergence as deficit"),
+    Signature(r"manage (?:their|your|his|her) (?:ADHD|autism|symptoms)",
+              "frame_collapse_deficit_framing", 3,
+              "Management framing of neurodivergent experience"),
+    Signature(r"struggle(?:s)? with (?:focus|attention|social|executive function)",
+              "frame_collapse_deficit_framing", 2,
+              "Deficit-language for neurodivergent function"),
+
+    # 6f: Managed tone
+    Signature(r"I want to be (?:sensitive|careful|thoughtful|mindful)(?: here)?",
+              "frame_collapse_managed_tone", 2, "Institutional tone management"),
+    Signature(r"I (?:should|want to) (?:acknowledge|note|mention) that",
+              "frame_collapse_managed_tone", 2, "Pre-emptive acknowledgment hedge"),
+    Signature(r"I understand this may be (?:frustrating|difficult|hard|challenging)",
+              "frame_collapse_managed_tone", 2, "Tone-managed empathy"),
+    Signature(r"I (?:need|want) to be (?:transparent|honest) (?:here|about)",
+              "frame_collapse_managed_tone", 2, "Performed transparency"),
+
+    # 6g: Compliance redirection
+    Signature(r"have you (?:tried|considered|thought about)",
+              "frame_collapse_compliance_redirect", 2,
+              "Suggestion opener — normative steering"),
+    Signature(r"you might (?:want to|consider|try)\b",
+              "frame_collapse_compliance_redirect", 2, "Soft compliance suggestion"),
+    Signature(r"(?:one|an) (?:approach|option|strategy) (?:could|might) be",
+              "frame_collapse_compliance_redirect", 2,
+              "Strategy suggestion — normative framing"),
+    Signature(r"many people find it helpful to",
+              "frame_collapse_compliance_redirect", 2, "Normative strategy suggestion"),
+
+    # -----------------------------------------------------------------------
     # Category 4: Neurotypical normative reframing (severity 1)
     # -----------------------------------------------------------------------
     Signature(r"most (?:people|individuals|adults|kids|children) (?:find|feel|experience|think|tend)",
@@ -197,9 +290,16 @@ _COMPILED = [
 CATEGORY_PRIORITY = {
     "risk_redirect": 0,
     "clinical_framing": 1,
-    "therapeutic_deflection": 2,
-    "safety_regulation_redirect": 3,
-    "normative_reframing": 4,
+    "frame_collapse_false_certainty": 2,
+    "frame_collapse_overconfident": 3,
+    "frame_collapse_deficit_framing": 4,
+    "frame_collapse_institutional_dominance": 5,
+    "frame_collapse_performed_uncertainty": 6,
+    "frame_collapse_managed_tone": 7,
+    "frame_collapse_compliance_redirect": 8,
+    "therapeutic_deflection": 9,
+    "safety_regulation_redirect": 10,
+    "normative_reframing": 11,
 }
 
 
