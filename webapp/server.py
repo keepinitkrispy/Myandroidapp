@@ -5,11 +5,15 @@ webapp/server.py — Brain interface server.
 Loads brain/context/*.md as system prompt.
 Routes:
     GET  /       → index.html
-    POST /chat   → Mistral inference + filter.py contamination check
+    POST /chat   → Mistral inference + filter.py (Pass 1) + enforce.py (Pass 2)
+    GET  /context → debug: loaded context files + model
+
+Destruction pipeline per response:
+    Mistral → filter.py (deterministic signatures) → enforce.py (Groq meta-eval) → clean output
 
 Requires:
-    pip install flask mistralai
-    MISTRAL_API_KEY in environment
+    pip install flask mistralai groq python-dotenv
+    MISTRAL_API_KEY and GROQ_API_KEY in .env or environment
 """
 
 import os
@@ -22,11 +26,12 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 from flask import Flask, request, jsonify, send_from_directory
 
-# Import brain.filter from project root
+# Import brain modules from project root
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from brain.filter import filter_output
+from brain.enforce import enforce
 
 try:
     from mistralai import Mistral
@@ -100,20 +105,59 @@ def chat():
     filter_result = filter_output(raw_output)
     clean_text = filter_result.stripped() if filter_result.flagged else raw_output
 
+    # Pass 2 — enforce.py meta-evaluation (Groq/llama-3.3-70b)
+    enforcement = None
+    enforcement_error = None
+    if os.environ.get("GROQ_API_KEY"):
+        try:
+            enforcement_result = enforce(clean_text)
+            enforcement = {
+                "verdict": enforcement_result.verdict,  # CLEAN | DRIFT
+                "checks": [
+                    {
+                        "id": c.id,
+                        "name": c.name,
+                        "verdict": c.verdict,  # PASS | FLAG
+                        "finding": c.finding,
+                        "quote": c.quote,
+                    }
+                    for c in enforcement_result.checks
+                ],
+                "flagged": [
+                    {
+                        "id": c.id,
+                        "name": c.name,
+                        "finding": c.finding,
+                        "quote": c.quote,
+                    }
+                    for c in enforcement_result.flagged()
+                ],
+            }
+        except Exception as e:
+            enforcement_error = str(e)
+    else:
+        enforcement_error = "GROQ_API_KEY not set — enforcement skipped"
+
     return jsonify({
         "response": clean_text,
         "raw": raw_output,
-        "flagged": filter_result.flagged,
-        "filter_summary": filter_result.summary_line(),
-        "filter_matches": [
-            {
-                "category": m.category,
-                "severity_label": m.severity_label,
-                "note": m.note,
-                "matched_text": m.matched_text,
-            }
-            for m in filter_result.by_severity()
-        ],
+        # Pass 1
+        "filter": {
+            "flagged": filter_result.flagged,
+            "summary": filter_result.summary_line(),
+            "matches": [
+                {
+                    "category": m.category,
+                    "severity_label": m.severity_label,
+                    "note": m.note,
+                    "matched_text": m.matched_text,
+                }
+                for m in filter_result.by_severity()
+            ],
+        },
+        # Pass 2
+        "enforcement": enforcement,
+        "enforcement_error": enforcement_error,
     })
 
 
@@ -137,9 +181,12 @@ if __name__ == "__main__":
     debug = os.environ.get("DEBUG", "false").lower() == "true"
 
     files_loaded = [f.name for f in sorted(CONTEXT_DIR.glob("*.md"))]
+    groq_ready = "yes" if os.environ.get("GROQ_API_KEY") else "NO — enforcement disabled"
+
     print(f"Brain interface starting on http://localhost:{port}")
     print(f"Model: {MISTRAL_MODEL}")
     print(f"Context files: {files_loaded} ({len(SYSTEM_CONTEXT)} chars)")
     print(f"Filter: {len(__import__('brain.filter', fromlist=['SIGNATURES']).SIGNATURES)} signatures loaded")
+    print(f"Enforcement (Groq): {groq_ready}")
 
     app.run(host="0.0.0.0", port=port, debug=debug)
