@@ -17,6 +17,9 @@ import sys
 import json
 from pathlib import Path
 
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
 from flask import Flask, request, jsonify, send_from_directory
 
 # Import brain.filter from project root
