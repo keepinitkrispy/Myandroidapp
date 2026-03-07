@@ -8,7 +8,7 @@ First test: Sunday (Oliver comes home)
 
 A cognitive scaffold for neurodivergent kids. Not therapy. Not an app. Not a chatbot. Not behavior management.
 
-AI configured from the inside by someone who lived the gap — Ryan, who is a version of Oliver and can step outside that simultaneously. That's the asset nobody else in this space has.
+AI configured from the inside by someone who lived the gap — Ryan, who is a version of Oliver and can step outside that simultaneously. That is a design asset with a specific limitation: lived experience is one data point with high relevance and real projection risk. Ryan's internal map of the gap is not Oliver's internal map. Where Oliver's behavior contradicts Ryan's design assumptions, Oliver is the data source.
 
 Built for Oliver first. Then other kids like him.
 
@@ -35,19 +35,62 @@ Built for Oliver first. Then other kids like him.
 
 > "It needs to be his to shape without overt risk of catastrophic harm or coddling all at once. He needs to trust it and it needs to trust him. Like a sandbox for his whole self that will both validate and protect and nurture and inspire all at once."
 
+## Risk variables
+
+### Ryan/Oliver perception gap
+
+Ryan's lived experience is the primary design input. That is an asset with a specific failure mode: Ryan's internal map of the gap is not Oliver's internal map of the gap. Same diagnosis does not mean same perceptual world. Same household does not mean same experience of the household.
+
+Where this creates risk:
+- Design assumptions drawn from Ryan's own childhood experience may not match what Oliver actually needs
+- Ryan's read of what Oliver is feeling in a given moment is inference, not access — the gap between Oliver's internal state and external expression is large (see AuDHD calibration above)
+- Ryan's tolerance for directness, friction, and intensity may be calibrated differently than Oliver's — what feels like honest engagement to Ryan may feel like pressure to Oliver
+- The design cannot be validated by Ryan's own comfort with it. His comfort is not the signal. Oliver's second voluntary return is the signal.
+
+This gap must be treated as a live variable, not a resolved one. If Oliver's behavior contradicts the design assumptions, Oliver is right.
+
+### Operational definition of harm
+
+Harm in this context means: Oliver's trust in his own perception is reduced by the interaction. Observable indicators:
+
+- He gives shaped, careful responses where he wasn't giving them before — performing appropriate rather than engaging from his actual state
+- He monitors the system for distress or a desired reaction and adjusts himself to manage it
+- He asks if the system is okay or checks whether his response landed correctly — his outward-care circuit activating toward something that should not be pulling for it
+- He avoids returning to it, and Ryan's direct read is that it's because something felt false or managed, not because he's tired or distracted
+- He shows increased masking or withdrawal after the session — decompression signal running in reverse
+
+Harm is not: a session that goes nowhere, a session where he's dysregulated, testing, or ignoring it. Those are data, not damage.
+
+### Exit criteria
+
+Stop the session, do not push forward if:
+- He shows signs of performing — shaped, careful responses where there were none before
+- He asks if the system is okay, monitors it for a reaction, or adjusts himself to manage its responses
+- He disengages and Ryan's instinct says it's because something felt off, not because he's tired or distracted
+- The system produces a response that contradicts his account of his own experience without flagging uncertainty
+
+Stop the whole Sunday deployment if:
+- He explicitly says it felt fake or managed
+- His behavior after the session shows increased masking or withdrawal — the decompression signal running in reverse
+
 ## First test — Sunday
 
-Oliver comes home Sunday. This is the first live context.
+Oliver comes home Sunday. This is the first live context. Treat it as diagnostic, not confirmatory. What he brings first and how he engages is data about his state, not a test of the scaffold.
 
 **What to watch for:**
 - Does he engage with it voluntarily or does he sense something managed about it?
 - What does he bring first — game design, something he wants to show, something that happened at mom's?
 - Does he stay or bounce off?
 - Does the presence hold his actual pace, or does it lag/lead?
+- Is he regulated or in threat-assessment mode when he arrives? (Transition from mom's = elevated load baseline)
 
 **Success on Sunday:** He comes back to it a second time without being prompted.
 
 **Failure on Sunday:** He senses it performing. Kids like Oliver have finely tuned detectors for performed patience and managed care. If it fires, it's over — he won't trust it again easily.
+
+**Risk baseline:** The comparison is not "scaffold vs. ideal." It is "scaffold vs. what Oliver already encounters" — adult interactions that pathologize, manage, or require masking. The marginal risk of a session that fails is: he bounces off it and doesn't return. The marginal risk of the status quo is cumulative institutional damage already in progress. That asymmetry is what makes Sunday's risk low, not any claim about the design being safe by construction.
+
+**What Sunday does not tell us:** Whether the scaffold works. One session in threat-assessment or transition state is not a representative sample. Sunday is the first data point, not the verdict.
 
 ## Architecture — open questions
 
