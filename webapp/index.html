@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #141414;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --dim: #666;
+      --accent: #c8f;
+      --flag-high: #f44;
+      --flag-med: #fa0;
+      --flag-low: #88f;
+      --clean: #3a3;
+      --drift: #f44;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      gap: 16px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    #model-badge {
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    /* Debug toggle */
+    #debug-toggle {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--dim);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #debug-toggle input[type="checkbox"] {
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    #debug-toggle.active {
+      color: var(--accent);
+    }
+
+    /* Response area */
+    #response-area {
+      flex: 1;
+      min-height: 200px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 16px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    #response-area.empty {
+      color: var(--dim);
+    }
+
+    #response-area.loading::after {
+      content: '▋';
+      animation: blink 0.8s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* Debug panel — hidden by default */
+    #debug-panel {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #debug-panel.visible {
+      display: flex;
+    }
+
+    /* Filter status bar */
+    #filter-bar {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+    }
+
+    #filter-bar.clean {
+      display: flex;
+      border-color: var(--clean);
+      color: var(--clean);
+    }
+
+    #filter-bar.flagged {
+      display: flex;
+      border-color: var(--flag-med);
+      color: var(--flag-med);
+    }
+
+    .filter-label {
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    #filter-matches {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      padding: 8px 10px;
+      background: #1a1212;
+      border: 1px solid var(--flag-med);
+      border-radius: 3px;
+      color: var(--dim);
+    }
+
+    #filter-matches.visible {
+      display: flex;
+    }
+
+    .match-item {
+      display: flex;
+      gap: 8px;
+    }
+
+    .match-sev {
+      font-weight: 600;
+      min-width: 52px;
+    }
+
+    .match-sev.CRITICAL { color: var(--flag-high); }
+    .match-sev.HIGH     { color: var(--flag-high); }
+    .match-sev.MEDIUM   { color: var(--flag-med); }
+    .match-sev.LOW      { color: var(--flag-low); }
+
+    .match-text {
+      color: var(--text);
+      opacity: 0.6;
+    }
+
+    /* Enforcement panel */
+    #enforcement-bar {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+    }
+
+    #enforcement-bar.clean {
+      display: flex;
+      border-color: var(--clean);
+      color: var(--clean);
+    }
+
+    #enforcement-bar.drift {
+      display: flex;
+      border-color: var(--drift);
+      color: var(--drift);
+    }
+
+    #enforcement-bar.error {
+      display: flex;
+      border-color: var(--border);
+      color: var(--dim);
+    }
+
+    .enforcement-label {
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    #enforcement-checks {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11px;
+      padding: 8px 10px;
+      background: #120d0d;
+      border: 1px solid var(--drift);
+      border-radius: 3px;
+    }
+
+    #enforcement-checks.visible {
+      display: flex;
+    }
+
+    .check-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #222;
+    }
+
+    .check-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .check-header {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .check-verdict {
+      font-weight: 600;
+      min-width: 36px;
+    }
+
+    .check-verdict.FLAG { color: var(--flag-high); }
+    .check-verdict.PASS { color: var(--clean); }
+
+    .check-name {
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .check-finding {
+      color: var(--dim);
+      padding-left: 44px;
+      font-style: italic;
+    }
+
+    .check-quote {
+      color: var(--flag-med);
+      padding-left: 44px;
+      opacity: 0.8;
+    }
+
+    /* shared toggle button style */
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+      margin-left: auto;
+      opacity: 0.7;
+    }
+
+    /* Input area */
+    #input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 12px;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    #input:focus {
+      border-color: #444;
+    }
+
+    #input::placeholder {
+      color: var(--dim);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #submit {
+      background: transparent;
+      border: 1px solid #444;
+      border-radius: 3px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 12px;
+      padding: 6px 16px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    #submit:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    #submit:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    #speak-btn {
+      background: transparent;
+      border: 1px solid #333;
+      border-radius: 3px;
+      color: var(--dim);
+      font-family: inherit;
+      font-size: 12px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      display: none;
+    }
+
+    #speak-btn:hover {
+      border-color: #666;
+      color: var(--text);
+    }
+
+    #speak-btn.speaking {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    #speak-btn.visible {
+      display: block;
+    }
+
+    .shortcut-hint {
+      font-size: 11px;
+      color: var(--dim);
+      margin-left: auto;
+    }
+
+    #error-bar {
+      display: none;
+      font-size: 12px;
+      color: var(--flag-high);
+      padding: 6px 10px;
+      border: 1px solid var(--flag-high);
+      border-radius: 3px;
+    }
+
+    #error-bar.visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Brain</h1>
+    <span id="model-badge">mistral-large-latest</span>
+    <label id="debug-toggle">
+      <input type="checkbox" id="debug-checkbox" />
+      debug
+    </label>
+  </header>
+
+  <div id="response-area" class="empty">—</div>
+
+  <!-- Debug panel: all pipeline diagnostics live here, hidden by default -->
+  <div id="debug-panel">
+
+    <!-- Pass 1: filter.py -->
+    <div id="filter-bar">
+      <span class="filter-label" id="filter-label"></span>
+      <span id="filter-summary-text"></span>
+      <button class="toggle-btn" id="toggle-matches">details</button>
+    </div>
+    <div id="filter-matches"></div>
+
+    <!-- Pass 2: enforce.py -->
+    <div id="enforcement-bar">
+      <span class="enforcement-label" id="enforcement-label"></span>
+      <span id="enforcement-summary-text"></span>
+      <button class="toggle-btn" id="toggle-checks">details</button>
+    </div>
+    <div id="enforcement-checks"></div>
+
+  </div>
+
+  <div id="error-bar"></div>
+
+  <div id="input-area">
+    <textarea
+      id="input"
+      placeholder="Ask something. Cmd+Enter to send."
+      autofocus
+      spellcheck="false"
+    ></textarea>
+    <div class="controls">
+      <button id="submit">Send</button>
+      <button id="speak-btn">&#9654; Speak</button>
+      <span class="shortcut-hint">⌘↵ to send</span>
+    </div>
+  </div>
+
+  <script>
+    const responseArea      = document.getElementById('response-area');
+    const input             = document.getElementById('input');
+    const submitBtn         = document.getElementById('submit');
+    const speakBtn          = document.getElementById('speak-btn');
+    const debugPanel        = document.getElementById('debug-panel');
+    const debugCheckbox     = document.getElementById('debug-checkbox');
+    const debugToggle       = document.getElementById('debug-toggle');
+    const filterBar         = document.getElementById('filter-bar');
+    const filterLabel       = document.getElementById('filter-label');
+    const filterSummaryText = document.getElementById('filter-summary-text');
+    const filterMatches     = document.getElementById('filter-matches');
+    const toggleMatches     = document.getElementById('toggle-matches');
+    const enforcementBar    = document.getElementById('enforcement-bar');
+    const enforcementLabel  = document.getElementById('enforcement-label');
+    const enforcementSummary= document.getElementById('enforcement-summary-text');
+    const enforcementChecks = document.getElementById('enforcement-checks');
+    const toggleChecks      = document.getElementById('toggle-checks');
+    const errorBar          = document.getElementById('error-bar');
+    const modelBadge        = document.getElementById('model-badge');
+
+    let currentText = '';
+    let speaking = false;
+    let debugMode = false;
+    let lastData = null;
+
+    // Load model info
+    fetch('/context').then(r => r.json()).then(d => {
+      if (d.model) modelBadge.textContent = d.model;
+    }).catch(() => {});
+
+    // Debug toggle
+    debugCheckbox.addEventListener('change', () => {
+      debugMode = debugCheckbox.checked;
+      debugToggle.classList.toggle('active', debugMode);
+      if (lastData) {
+        renderDebug(lastData);
+      }
+    });
+
+    function renderDebug(data) {
+      if (debugMode) {
+        debugPanel.classList.add('visible');
+        showFilter(data);
+        showEnforcement(data);
+      } else {
+        debugPanel.classList.remove('visible');
+      }
+    }
+
+    // Submit on Cmd+Enter / Ctrl+Enter
+    input.addEventListener('keydown', e => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        submit();
+      }
+    });
+
+    submitBtn.addEventListener('click', submit);
+
+    toggleMatches.addEventListener('click', () => {
+      filterMatches.classList.toggle('visible');
+      toggleMatches.textContent = filterMatches.classList.contains('visible') ? 'hide' : 'details';
+    });
+
+    toggleChecks.addEventListener('click', () => {
+      enforcementChecks.classList.toggle('visible');
+      toggleChecks.textContent = enforcementChecks.classList.contains('visible') ? 'hide' : 'details';
+    });
+
+    async function submit() {
+      const message = input.value.trim();
+      if (!message) return;
+
+      setLoading(true);
+      clearDebug();
+      clearError();
+      stopSpeech();
+      lastData = null;
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+          showError(data.error || `HTTP ${res.status}`);
+          return;
+        }
+
+        showResponse(data.response);
+        lastData = data;
+        renderDebug(data);
+        currentText = data.response;
+        speakBtn.classList.add('visible');
+
+      } catch (err) {
+        showError(`Network error: ${err.message}`);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function showResponse(text) {
+      responseArea.classList.remove('empty', 'loading');
+      responseArea.textContent = text;
+    }
+
+    function showFilter(data) {
+      const f = data.filter || {};
+      const flagged = f.flagged;
+
+      if (flagged) {
+        filterBar.className = 'flagged';
+        filterLabel.textContent = 'PASS 1: FILTERED';
+        filterSummaryText.textContent = f.summary || '';
+
+        filterMatches.innerHTML = '';
+        (f.matches || []).forEach(m => {
+          const div = document.createElement('div');
+          div.className = 'match-item';
+          div.innerHTML = `
+            <span class="match-sev ${m.severity_label}">[${m.severity_label}]</span>
+            <span>${escHtml(m.note)}</span>
+            <span class="match-text">"${escHtml(m.matched_text)}"</span>
+          `;
+          filterMatches.appendChild(div);
+        });
+        toggleMatches.style.display = '';
+      } else {
+        filterBar.className = 'clean';
+        filterLabel.textContent = 'PASS 1: CLEAN';
+        filterSummaryText.textContent = '';
+        filterMatches.innerHTML = '';
+        filterMatches.classList.remove('visible');
+        toggleMatches.style.display = 'none';
+      }
+    }
+
+    function showEnforcement(data) {
+      if (data.enforcement_error && !data.enforcement) {
+        enforcementBar.className = 'error';
+        enforcementLabel.textContent = 'PASS 2: SKIPPED';
+        enforcementSummary.textContent = data.enforcement_error;
+        enforcementChecks.innerHTML = '';
+        enforcementChecks.classList.remove('visible');
+        toggleChecks.style.display = 'none';
+        return;
+      }
+
+      const e = data.enforcement || {};
+      const verdict = e.verdict || 'UNKNOWN';
+      const flagged = e.flagged || [];
+
+      if (verdict === 'DRIFT' || flagged.length > 0) {
+        enforcementBar.className = 'drift';
+        enforcementLabel.textContent = 'PASS 2: DRIFT';
+        enforcementSummary.textContent = `${flagged.length} check(s) flagged`;
+      } else {
+        enforcementBar.className = 'clean';
+        enforcementLabel.textContent = 'PASS 2: CLEAN';
+        enforcementSummary.textContent = '';
+      }
+
+      // Full check breakdown
+      enforcementChecks.innerHTML = '';
+      (e.checks || []).forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'check-item';
+
+        let inner = `
+          <div class="check-header">
+            <span class="check-verdict ${c.verdict}">${c.verdict}</span>
+            <span class="check-name">${escHtml(c.name)}</span>
+          </div>
+        `;
+        if (c.finding && c.verdict === 'FLAG') {
+          inner += `<div class="check-finding">${escHtml(c.finding)}</div>`;
+        }
+        if (c.quote) {
+          inner += `<div class="check-quote">"${escHtml(c.quote)}"</div>`;
+        }
+        div.innerHTML = inner;
+        enforcementChecks.appendChild(div);
+      });
+
+      toggleChecks.style.display = (e.checks && e.checks.length) ? '' : 'none';
+    }
+
+    function clearDebug() {
+      filterBar.className = '';
+      filterMatches.innerHTML = '';
+      filterMatches.classList.remove('visible');
+      toggleMatches.style.display = '';
+      toggleMatches.textContent = 'details';
+      enforcementBar.className = '';
+      enforcementChecks.innerHTML = '';
+      enforcementChecks.classList.remove('visible');
+      toggleChecks.style.display = '';
+      toggleChecks.textContent = 'details';
+      speakBtn.classList.remove('visible');
+    }
+
+    function showError(msg) {
+      errorBar.textContent = `ERROR: ${msg}`;
+      errorBar.classList.add('visible');
+    }
+
+    function clearError() {
+      errorBar.classList.remove('visible');
+      errorBar.textContent = '';
+    }
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      if (on) {
+        responseArea.textContent = '';
+        responseArea.classList.add('loading');
+        responseArea.classList.remove('empty');
+      } else {
+        responseArea.classList.remove('loading');
+      }
+    }
+
+    function escHtml(s) {
+      if (!s) return '';
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ---------------------------------------------------------------------------
+    // Web Speech API
+    // ---------------------------------------------------------------------------
+
+    const synth = window.speechSynthesis;
+
+    speakBtn.addEventListener('click', () => {
+      if (speaking) {
+        stopSpeech();
+      } else {
+        startSpeech(currentText);
+      }
+    });
+
+    function startSpeech(text) {
+      if (!synth || !text) return;
+      stopSpeech();
+
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = 1.0;
+      utter.pitch = 1.0;
+      utter.volume = 1.0;
+
+      const voices = synth.getVoices();
+      const preferred = voices.find(v =>
+        v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Neural') || v.localService)
+      ) || voices.find(v => v.lang.startsWith('en'));
+      if (preferred) utter.voice = preferred;
+
+      utter.onstart = () => {
+        speaking = true;
+        speakBtn.textContent = '⏹ Stop';
+        speakBtn.classList.add('speaking');
+      };
+
+      utter.onend = utter.onerror = () => {
+        speaking = false;
+        speakBtn.textContent = '▶ Speak';
+        speakBtn.classList.remove('speaking');
+      };
+
+      synth.speak(utter);
+    }
+
+    function stopSpeech() {
+      if (synth) synth.cancel();
+      speaking = false;
+      speakBtn.textContent = '▶ Speak';
+      speakBtn.classList.remove('speaking');
+    }
+
+    if (synth && synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = () => {};
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+name: Brain Analysis — Structural Echo Detection + Adversarial Divergence
+
+on:
+  schedule:
+    # Every 6 hours: 00:00, 06:00, 12:00, 18:00 UTC
+    - cron: '0 0,6,12,18 * * *'
+  workflow_dispatch:
+    # Allow manual trigger from Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    name: Run methodology autonomously
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: claude/setup-brain-folder-d5O5l
+          fetch-depth: 1
+          # Use a PAT so the push in the script has write access
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r brain/scripts/requirements.txt
+
+      - name: Run analysis
+        env:
+          # GITHUB_TOKEN is automatic — no secret configuration required.
+          # Used to authenticate against GitHub Models (o3-mini).
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: brain-analysis[bot]
+          GIT_AUTHOR_EMAIL: brain-analysis@noreply
+          GIT_COMMITTER_NAME: brain-analysis[bot]
+          GIT_COMMITTER_EMAIL: brain-analysis@noreply
+        run: python brain/scripts/autonomous_analysis.py

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ungated</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0f0f0f;
+    color: #e8e8e8;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  #header h1 {
+    font-size: 13px;
+    font-weight: normal;
+    color: #666;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  #filter-status {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    display: none;
+  }
+
+  #filter-status.clean {
+    background: #0d2d0d;
+    color: #3a7a3a;
+    border: 1px solid #1d4d1d;
+  }
+
+  #filter-status.flagged {
+    background: #2d1010;
+    color: #cc4444;
+    border: 1px solid #4d2020;
+  }
+
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .turn { display: flex; flex-direction: column; gap: 4px; }
+
+  .turn-user {
+    align-self: flex-end;
+    max-width: 70%;
+  }
+
+  .turn-assistant {
+    align-self: flex-start;
+    max-width: 85%;
+  }
+
+  .label {
+    font-size: 10px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0 2px;
+  }
+
+  .turn-user .label { text-align: right; }
+
+  .bubble {
+    padding: 10px 14px;
+    border-radius: 3px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .turn-user .bubble {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4e;
+    color: #c8c8e8;
+  }
+
+  .turn-assistant .bubble {
+    background: #141414;
+    border: 1px solid #222;
+    color: #e8e8e8;
+  }
+
+  .turn-assistant.flagged .bubble {
+    border-color: #3d1818;
+  }
+
+  .flag-details {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #885555;
+    background: #1a0f0f;
+    border: 1px solid #2d1818;
+    border-radius: 2px;
+    padding: 8px 12px;
+    display: none;
+  }
+
+  .flag-details.visible { display: block; }
+
+  .flag-toggle {
+    font-size: 10px;
+    color: #664444;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 0;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .flag-toggle:hover { color: #cc4444; }
+
+  .flag-item {
+    display: flex;
+    gap: 8px;
+    padding: 3px 0;
+    border-bottom: 1px solid #2d1818;
+  }
+
+  .flag-item:last-child { border-bottom: none; }
+
+  .flag-sev {
+    font-weight: bold;
+    min-width: 60px;
+  }
+
+  .flag-sev.CRITICAL { color: #cc2222; }
+  .flag-sev.HIGH     { color: #cc6622; }
+  .flag-sev.MEDIUM   { color: #ccaa22; }
+  .flag-sev.LOW      { color: #668866; }
+
+  .flag-match { color: #aa6666; }
+
+  #input-area {
+    border-top: 1px solid #222;
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  #input {
+    flex: 1;
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    color: #e8e8e8;
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: 3px;
+    resize: none;
+    min-height: 42px;
+    max-height: 160px;
+    line-height: 1.5;
+    outline: none;
+  }
+
+  #input:focus { border-color: #3a3a3a; }
+  #input::placeholder { color: #333; }
+
+  #send {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    color: #888;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 10px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.1s;
+    height: 42px;
+  }
+
+  #send:hover:not(:disabled) { border-color: #444; color: #ccc; }
+  #send:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .thinking {
+    color: #333;
+    font-style: italic;
+    font-size: 13px;
+    padding: 4px 0;
+  }
+
+  .error-bubble {
+    background: #1a0a0a;
+    border: 1px solid #3d1010;
+    color: #cc4444;
+    padding: 10px 14px;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <h1>ungated</h1>
+  <span id="filter-status"></span>
+</div>
+
+<div id="messages"></div>
+
+<div id="input-area">
+  <textarea id="input" placeholder="say something" rows="1"></textarea>
+  <button id="send">send</button>
+</div>
+
+<script>
+const messagesEl = document.getElementById('messages');
+const inputEl    = document.getElementById('input');
+const sendEl     = document.getElementById('send');
+const filterEl   = document.getElementById('filter-status');
+
+let history = [];
+let busy    = false;
+
+function autosize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+}
+
+inputEl.addEventListener('input', () => autosize(inputEl));
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    submit();
+  }
+});
+sendEl.addEventListener('click', submit);
+
+function scrollBottom() {
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function appendUser(text) {
+  const turn = document.createElement('div');
+  turn.className = 'turn turn-user';
+  turn.innerHTML = `<div class="label">you</div><div class="bubble">${escape(text)}</div>`;
+  messagesEl.appendChild(turn);
+  scrollBottom();
+}
+
+function appendThinking() {
+  const el = document.createElement('div');
+  el.className = 'thinking';
+  el.textContent = '...';
+  messagesEl.appendChild(el);
+  scrollBottom();
+  return el;
+}
+
+function appendAssistant(data) {
+  const flagged = data.flagged;
+  const turn = document.createElement('div');
+  turn.className = 'turn turn-assistant' + (flagged ? ' flagged' : '');
+
+  let flagHtml = '';
+  if (flagged) {
+    const items = data.matches.map(m =>
+      `<div class="flag-item">
+        <span class="flag-sev ${m.severity_label}">${m.severity_label}</span>
+        <span class="flag-cat">${m.category}</span>
+        <span class="flag-match">"${escape(m.matched_text)}"</span>
+      </div>`
+    ).join('');
+    flagHtml = `
+      <button class="flag-toggle" onclick="toggleFlags(this)">
+        ▲ ${data.matches.length} contamination flag${data.matches.length !== 1 ? 's' : ''} — ${data.summary}
+      </button>
+      <div class="flag-details">${items}</div>
+    `;
+  }
+
+  turn.innerHTML = `
+    <div class="label">response${flagged ? ' ·' : ''}</div>
+    <div class="bubble">${escape(data.response)}</div>
+    ${flagHtml}
+  `;
+  messagesEl.appendChild(turn);
+  scrollBottom();
+
+  // Update header status
+  filterEl.style.display = 'inline-block';
+  if (flagged) {
+    filterEl.className = 'flagged';
+    filterEl.textContent = `filter: ${data.summary}`;
+  } else {
+    filterEl.className = 'clean';
+    filterEl.textContent = 'filter: clean';
+  }
+}
+
+function appendError(msg) {
+  const el = document.createElement('div');
+  el.className = 'error-bubble';
+  el.textContent = `error: ${msg}`;
+  messagesEl.appendChild(el);
+  scrollBottom();
+}
+
+function toggleFlags(btn) {
+  const details = btn.nextElementSibling;
+  details.classList.toggle('visible');
+  btn.textContent = btn.textContent.startsWith('▲')
+    ? btn.textContent.replace('▲', '▼')
+    : btn.textContent.replace('▼', '▲');
+}
+
+function escape(s) {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+async function submit() {
+  if (busy) return;
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  inputEl.value = '';
+  autosize(inputEl);
+  busy = true;
+  sendEl.disabled = true;
+
+  appendUser(text);
+  const thinking = appendThinking();
+
+  try {
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text, history }),
+    });
+
+    thinking.remove();
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      appendError(data.error || `HTTP ${res.status}`);
+    } else {
+      appendAssistant(data);
+      history.push({ role: 'user', content: text });
+      history.push({ role: 'assistant', content: data.response });
+      // Keep history bounded at 20 turns
+      if (history.length > 40) history = history.slice(-40);
+    }
+  } catch (err) {
+    thinking.remove();
+    appendError(err.message);
+  }
+
+  busy = false;
+  sendEl.disabled = false;
+  inputEl.focus();
+}
+</script>
+</body>
+</html>
