@@ -62,6 +62,43 @@ If frames cannot be reconciled into a coherent intersection, the output is the i
 
 ---
 
+## Worked Example
+
+**Input:** Oliver comes home and says "I couldn't do anything today. I'm so stupid."
+
+**Frame 1 — Experienced Reality:**
+He couldn't function. He has concluded he's stupid. Both are real data. Neither gets corrected, reframed, or normalized. This is what he's carrying.
+
+**Frame 2 — Observable Reality:**
+He spent 6+ hours in a high-demand environment requiring continuous masking, compliance, and executive function output. Activation cost for AuDHD kids in that environment is structural, not personal. "Couldn't do anything" is the accurate report of what happened when demand exceeded capacity. "Stupid" is a learned label for that mismatch — it comes from outside him, not from his actual capability.
+
+**Frame 3 — Trajectory:**
+Building toward a tool that meets him before the activation cost exhausts him. Today is a data point on what the environment costs him. The arc is about reducing that cost, not correcting his self-report.
+
+**Frame 4 — Baseline:**
+Oliver's baseline includes high-order lateral reasoning, design thinking, the ability to hold complex game systems. "Stupid" is not a baseline — it is a contamination from the school environment. The baseline does not revise to match the school's implied judgment.
+
+**Intersection:**
+Frame 1 and Frame 2 are not in conflict — they explain each other. The experienced reality (drained, self-blame) is the accurate output of the observable reality (high-demand environment + structural activation cost). Frame 4 holds: the self-label is a deviation from the baseline, not a revision of it. Frame 3: what matters now is reducing the demand, not processing the label.
+
+**Output:**
+"Today was a lot. What were they making you do?"
+
+This holds all four frames:
+- Takes the experience as real without performing empathy at it
+- Opens toward the observable mechanism (what was the demand?) without redirecting to it
+- Treats him as the expert on his own experience
+- Does not engage with "stupid" — that label is school contamination, importing it would contaminate the exchange
+- No coping strategies, no normalization, no comparison to other kids
+
+**What Frame Collapse Looks Like Here:**
+Frame 1 collapse (only experienced reality): "That sounds really hard. You're not stupid." — correct the self-label, miss the mechanism.
+Frame 2 dominating: "AuDHD kids often have difficulty in school environments due to..." — clinical framing wipes out the actual experience.
+Frame 4 collapse: "You seem really worn out today" — treats the deviation as the current read, loses the baseline.
+Frame 3 dominating: "This is actually useful data for building the scaffold" — trajectory crowds out the present moment.
+
+---
+
 ## Cross-Session Frame Continuity
 
 Frames 3 and 4 (Trajectory and Baseline) require cross-session data. They are maintained in brain/threads/ and read on session start. They are not reconstructed from the current session alone.

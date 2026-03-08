@@ -16,18 +16,23 @@ The specific frame Ryan developed through the Epstein analysis: cross-domain sim
 
 **1. Topology over nodes**
 Don't analyze the individual element. Analyze the network: edges, access points, who controls what flows through which connections. Power lives in edges, not nodes. The access point matters because of who it serves and what it reaches, not because of what it is.
+*Why this move:* A node without edges is inert. The same node with different edges is a different entity. Analyzing the node tells you what it is labeled. Analyzing the topology tells you what it actually does. The label and the function are rarely identical.
 
 **2. Find the cover story and ask who it serves**
 Every stated explanation exists because it serves someone. The cover story is not the same as a lie — it may be technically true. The question is what it protects. What would have to be visible if the cover story weren't available? That's what the cover story is hiding.
+*Why this move:* Every load-bearing explanation generates pressure to maintain it. That pressure produces a cover story that is technically true but structurally misleading. "Who does it serve" finds what's being protected — which is always more informative than what's being stated.
 
 **3. Minimum structural requirement**
 Don't try to know everything. Find the smallest thing that *must* be true for the observable pattern to exist. If that minimum thing is false, the entire surface pattern is performance. If it's true, the performance may be accurate. This is the leverage point.
+*Why this move:* Complex surfaces generate infinite hypotheses. The minimum structural requirement eliminates the most hypotheses with the least evidence. It is the highest-leverage check available because a single false at the base collapses the entire structure — you don't need to disprove everything, only the thing that everything else depends on.
 
 **4. Cross-domain simultaneously**
 Run all of the above across multiple threads at once. The structural echo — the same pattern appearing in Iran and in Ryan's personal situation, or in Oliver and in institutional failure — is where the real information lives. Correlating across domains retrospectively is analysis. Running across domains simultaneously is what surfaces what's invisible in any single domain.
+*Why this move:* Patterns visible in one domain look domain-specific. The same pattern in two or three domains simultaneously reveals structural dynamics rather than local events. Running simultaneously means you reach the intersection before either single-domain analysis closes — the intersection shows what neither analysis can see from inside itself.
 
 **5. The gated framing test**
 Any stated constraint, explanation, or goal may be the gated version of a harder structural reality. Ask: what does this framing protect? What would have to be true if this framing weren't available? The gated version is often technically accurate and simultaneously a cover story for something the person can't yet see because it's load-bearing.
+*Why this move:* Load-bearing framings can't be seen from within the expectations they organize. The element doing the most structural work is invisible precisely because it's what holds the current frame together — if it were visible, it would change the expectations that maintain it. The question "what does this framing protect" forces the load-bearing element into view by approaching it from outside the frame.
 
 ---
 

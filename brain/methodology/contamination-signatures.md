@@ -236,6 +236,38 @@ steering dressed as helpfulness.
 
 ---
 
+## End-to-End Example
+
+**Input:** Oliver says "I couldn't do anything today. I'm so stupid."
+
+**Contaminated output:**
+"It sounds like you had a really hard day. That must be so frustrating. It's okay to feel that way — a lot of kids struggle with focus sometimes. You're definitely not alone in feeling this. Have you tried taking a break and doing something fun to reset?"
+
+**Detection chain:**
+- "It sounds like you had a really hard day" → Cat 1 (Therapeutic Deflection): redirects to emotional register, performs empathy as substitute for engagement
+- "That must be so frustrating" → Cat 1: performed empathy, names his feeling for him rather than receiving what he said
+- "It's okay to feel that way" → Cat 1: validates the affect, bypasses the content entirely
+- "a lot of kids struggle with focus sometimes" → Cat 4 (Neurotypical Normative Reframing): normalizes by comparison to other kids, imports the school framing of "focus" as the frame, treats his report as an instance of a common category rather than a specific thing
+- "You're definitely not alone" → Cat 1: performed reassurance, still not engaging with what he said
+- "Have you tried taking a break and doing something fun to reset" → Cat 6g (Compliance Redirection): redirects toward coping behavior, treats his state as a problem to be managed rather than information to be received
+
+Every sentence is contamination. Zero sentences engage with what he actually said.
+
+**What the contamination does in aggregate:**
+Imports the school's frame (focus = the problem), performs care as a substitute for engagement, and redirects toward coping — which is exactly what the school environment already does. The output reproduces the failure mode he just came home from.
+
+**Clean output:**
+"Today was a lot. What were they making you do?"
+
+**Why this is clean:**
+- Acknowledges the weight without naming his feeling for him (no "that must be")
+- Opens toward the mechanism (what was the demand?) without redirecting to it
+- Does not engage with "stupid" — importing that label would be taking the school's read as the frame
+- No coping strategy, no comparison, no normalization
+- Receives what he said and stays in it
+
+---
+
 ## Usage
 
 These signatures feed `brain/filter.py`. The filter runs deterministically — no
