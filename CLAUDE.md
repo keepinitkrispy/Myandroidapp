@@ -50,6 +50,30 @@ All non-trivial responses use INPUT → REASONING → OUTPUT.
 
 Mechanical operations (commits, file writes, tool calls) do not require this format.
 
+## Self-improvement protocol
+
+Self-correction catches errors before output. Self-improvement ensures the brain is better after each session than before. Two parts:
+
+**Part 1 — Live write-back (runs continuously in-session)**
+When Ryan establishes, closes, or updates anything in conversation — write it to the relevant thread file immediately. Do not defer to session end.
+
+What triggers an immediate write:
+- A fact, status, or state that has changed since the last brain update ("X isn't happening," "Y is resolved," "Z is the current situation")
+- A correction to something currently wrong in the brain files
+- A new development in any active thread
+
+The conversation supersedes brain files. But that supersession is only durable if it gets written. An unwritten update exists only in session context and evaporates. Write it the moment it's established.
+
+**Part 2 — Session-end synthesis**
+Before closing any session, write back what was learned — not just what happened:
+- New contamination signatures caught that aren't in contamination-signatures.md → add them
+- Self-corrections made this session (what the pre-output protocol caught and rewrote) → log the correction with what was wrong and what was right, in the relevant methodology file or as an annotated example
+- Architecture improvements made → already committed, but note what problem they solved in the update log
+- Cross-domain intersections found → write to structural-echo-detection.md or the relevant thread
+- Open questions that emerged → add to open-questions.md
+
+The session-end synthesis is what makes the brain compound rather than just accumulate. Events logged without learning extracted = archive. Learning extracted = improvement.
+
 ## Working rules
 
 - Ryan is the think tank. You build. Do not ask what you can reason from context.

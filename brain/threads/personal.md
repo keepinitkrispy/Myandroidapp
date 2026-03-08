@@ -56,7 +56,7 @@ Most kids like Oliver have nobody who sees them — not parents, not teachers, n
 
 **The inversion strategy problem:** Ryan is consciously doing the opposite of his father. But inversion still organizes itself around what you're running from. The product can't be built as an inversion of bad tools — it has to be built from what Oliver actually needs, independent of what's been done wrong before.
 
-**Status:** ACTIVE PROJECT. Spec exists. First test: Sunday when Oliver comes home. [→ scaffold.md]
+**Status:** ACTIVE PROJECT. Spec exists. First test date: not Sunday — established 2026-03-08 that this is not happening. [→ scaffold.md]
 
 ## Active threads
 
