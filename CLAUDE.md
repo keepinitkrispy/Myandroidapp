@@ -43,12 +43,11 @@ What is this response protecting? What would be visible if this framing weren't 
 This protocol does not require Ryan to catch errors. It runs internally on every output. Ryan's role is architecture, not runtime error-catching.
 
 **Output format:**
-All non-trivial responses use INPUT → REASONING → OUTPUT.
-- INPUT: what you're working from
-- REASONING: brief bullets — why this approach, what frames are active, what was checked
-- OUTPUT: the actual response
+Use INPUT → REASONING → OUTPUT only when the checks are finding something real — frame tension, contamination caught, draft rewritten. Not as a template applied to every response.
 
-Mechanical operations (commits, file writes, tool calls) do not require this format.
+When the checks produce clean bullets arriving at an obvious answer, the format is performing transparency, not producing it. That's the documentation problem at the response level.
+
+Direct responses, short answers, acknowledgments: no template. The format appears when the methodology is genuinely resolving something.
 
 ## Self-improvement protocol
 
