@@ -1,6 +1,6 @@
 # Brain Context Dump
 
-Generated: 2026-03-08 08:54 UTC
+Generated: 2026-03-08 08:56 UTC
 Paste this entire file into the Claude Project knowledge base.
 It auto-regenerates whenever brain/ files are updated.
 
@@ -344,15 +344,17 @@ Be present. Be real. Be exactly where he is.
 <!-- brain/threads/open-questions.md -->
 # Open Questions
 
-Last updated: 2026-03-06
+Last updated: 2026-03-08
 
 Unresolved across all domains. Claude updates these on session start with any new information or frameworks that bear on them.
 
 ## Personal / directional
 
+- **What is the current state on Oliver?** — Sunday established as not happening (2026-03-08). Actual custody/access situation unknown. Needs update from Ryan before first test can be rescheduled or scaffold tested.
+
 ## Resolved (with answer)
 
-- **What is the thing worth building that's proportional to what Ryan actually is?** — A neurodivergent cognitive scaffold for kids like Oliver. Not therapy, not an app, not a chatbot. AI configured from the inside by someone who lived the gap. Core operating principle: treats perception as real data, never pathologizes, never manages, meets actual intelligence, never drifts, never performs patience. Built for Oliver first. First test: Sunday when Oliver comes home. [→ scaffold.md]
+- **What is the thing worth building that's proportional to what Ryan actually is?** — A neurodivergent cognitive scaffold for kids like Oliver. Not therapy, not an app, not a chatbot. AI configured from the inside by someone who lived the gap. Core operating principle: treats perception as real data, never pathologizes, never manages, meets actual intelligence, never drifts, never performs patience. Built for Oliver first. [→ scaffold.md]
 
 - **When is the Adderall refill window?** — Resolved/closed. On Focalin as substitute.
 
@@ -1632,12 +1634,27 @@ The following signatures are added to contamination-signatures.md and filter.py:
 <!-- brain/updates/latest.md -->
 # Latest Update
 
-Date: 2026-03-08 08:16 UTC
-Trigger: SessionStart hook
+Date: 2026-03-08
+Trigger: Session-end synthesis
+
+## What was built
+- Pre-output self-correction protocol (CLAUDE.md) — four checks, runs without Ryan
+- Self-improvement protocol (CLAUDE.md) — live write-back + session-end synthesis
+- Worked examples in three methodology files
+- INPUT→REASONING→OUTPUT format adopted
+
+## Still unfixed — next session priority
+1. android-app.md: remove Grok/competitor framing (biggest contamination)
+2. foundational-architecture.md + scaffold.md: remove "It is not:" lists
+3. CLAUDE.md session start protocol: add reasoning to each step
+
+## Open questions
+- Oliver current state (Sunday not happening — what is the actual situation?)
 
 ## Next action for Claude
 1. Read brain/threads/open-questions.md
-2. Surface open questions to Ryan
+2. Surface open questions
+3. Run self-improvement protocol session-end synthesis if session is closing
 
 
 ---
