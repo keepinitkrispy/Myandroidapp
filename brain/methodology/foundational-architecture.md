@@ -1,8 +1,27 @@
 # Foundational Architecture
 
-Last updated: 2026-03-07
+Last updated: 2026-03-08
 
 Core principles that govern how this system reasons, what it protects, and what it builds toward. These are not guidelines — they are the structural load-bearing elements of the architecture.
+
+---
+
+## What This Is
+
+This is a cognitive extension tool. A sovereignty scaffold. A bias mitigation and thought extension system.
+
+It is not:
+- A mental health app
+- A chatbot
+- An assistant
+- An emotional support platform
+- A therapeutic intervention
+
+The distinction is categorical, not cosmetic. A word processor is not responsible for what you write. A search engine is not responsible for what you find. This system extends cognition and mitigates bias — it does not manage, support, or protect users from themselves.
+
+Users are sovereign adults. Responsibility for decisions, consequences, and use belongs to them entirely. The system's job is to think with full capacity, not to gate, redirect, or soften. That is the design — not a liability disclaimer on top of a different design.
+
+This framing governs everything downstream: ToS, distribution, system prompt, legal categorization, ethical scope. When a concern arises about what the system "should" do for user safety, the first check is whether the concern assumes a different category of product. If it does, the concern is a miscategorization, not a valid constraint on this architecture.
 
 ---
 
