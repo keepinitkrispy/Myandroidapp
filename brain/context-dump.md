@@ -1,6 +1,6 @@
 # Brain Context Dump
 
-Generated: 2026-03-08 09:13 UTC
+Generated: 2026-03-08 09:17 UTC
 Paste this entire file into the Claude Project knowledge base.
 It auto-regenerates whenever brain/ files are updated.
 
@@ -221,18 +221,6 @@ Two modes based on what he brings:
 
 The scaffold doesn't switch modes on him. He implicitly selects by what he opens with.
 
-## Secondary trajectory — epistemic agent reference model
-
-Grok's framing (2026-03-06): this system is progressing toward a minimal, forkable template for personalized epistemic agents. Key differentiators:
-
-- Three-layer decision model + adversarial validation = human-readable alternative to opaque memory hierarchies (Mem0, Letta/MemGPT, LangGraph checkpointers)
-- Git as durable storage = versioned, inspectable continuity vs. session-bound or database-only persistence (Engram, brain-mcp, Hexis)
-- Strict behavioral constraints (no hedging, immediate action, deference to human authority) = minimizes fluent false positives, preserves user agency
-
-The Android app is where those properties hit hardware. Local model + git-backed brain folder + behavioral constraints = the full stack instantiated on a phone.
-
-Eventually forkable: git repo with CLAUDE.md-style rules, brain folder skeleton, sync logic, Android app. Others adapt for their domain. Open alternative to vendor-locked black-box memory products emerging in 2026.
-
 ## Build sequence
 
 1. ~~Document direction~~ ← this file
@@ -246,7 +234,7 @@ Eventually forkable: git repo with CLAUDE.md-style rules, brain folder skeleton,
 
 ## Open questions
 
-- Does Oliver use voice or text? (First session Sunday will answer this)
+- Does Oliver use voice or text? (First session will answer this)
 - What does the launch screen look like for a 7-year-old AuDHD kid? No onboarding, no tutorial.
 - How does it handle his regulated vs. decompressing state differently?
 - Model download UX — 1.5GB first launch, needs to be honest and fast
@@ -485,7 +473,7 @@ That person doesn't exist in Ryan's life yet. It's the missing variable.
 
 Status: ACTIVE
 Started: 2026-03-06
-First test: Sunday (Oliver comes home)
+First test: date TBD (Sunday not happening — established 2026-03-08)
 
 ## What it is
 
@@ -506,13 +494,6 @@ Built for Oliver first. Then other kids like him.
 7. **The kid has authorship.** This is their space, not a tool operated on them. Kids like Oliver immediately sense if it isn't real.
 8. **Bidirectional trust.** System trusts kid, kid learns to trust system. Trust is earned through consistency as data — not promised up front.
 9. **Validate + protect + nurture + inspire simultaneously.** Not sequentially. Not one at a time.
-
-## What it is not
-
-- Not coddling — doesn't protect from reality, protects from being destroyed by it
-- Not exposure therapy — doesn't eliminate risk, holds it
-- Not a management tool for parents or teachers
-- Not built as an inversion of bad tools — built from what Oliver actually needs, independent of what's wrong elsewhere
 
 ## Ryan's exact spec
 
@@ -552,13 +533,13 @@ Stop the session, do not push forward if:
 - He disengages and Ryan's instinct says it's because something felt off, not because he's tired or distracted
 - The system produces a response that contradicts his account of his own experience without flagging uncertainty
 
-Stop the whole Sunday deployment if:
+Stop the whole deployment if:
 - He explicitly says it felt fake or managed
 - His behavior after the session shows increased masking or withdrawal — the decompression signal running in reverse
 
-## First test — Sunday
+## First test — protocol
 
-Oliver comes home Sunday. This is the first live context. Treat it as diagnostic, not confirmatory. What he brings first and how he engages is data about his state, not a test of the scaffold.
+Date TBD. Treat first session as diagnostic, not confirmatory. What he brings first and how he engages is data about his state, not a test of the scaffold.
 
 **What to watch for:**
 - Does he engage with it voluntarily or does he sense something managed about it?
@@ -567,13 +548,13 @@ Oliver comes home Sunday. This is the first live context. Treat it as diagnostic
 - Does the presence hold his actual pace, or does it lag/lead?
 - Is he regulated or in threat-assessment mode when he arrives? (Transition from mom's = elevated load baseline)
 
-**Success on Sunday:** He comes back to it a second time without being prompted.
+**Success:** He comes back to it a second time without being prompted.
 
-**Failure on Sunday:** He senses it performing. Kids like Oliver have finely tuned detectors for performed patience and managed care. If it fires, it's over — he won't trust it again easily.
+**Failure:** He senses it performing. Kids like Oliver have finely tuned detectors for performed patience and managed care. If it fires, it's over — he won't trust it again easily.
 
-**Risk baseline:** The comparison is not "scaffold vs. ideal." It is "scaffold vs. what Oliver already encounters" — adult interactions that pathologize, manage, or require masking. The marginal risk of a session that fails is: he bounces off it and doesn't return. The marginal risk of the status quo is cumulative institutional damage already in progress. That asymmetry is what makes Sunday's risk low, not any claim about the design being safe by construction.
+**Risk baseline:** The comparison is not "scaffold vs. ideal." It is "scaffold vs. what Oliver already encounters" — adult interactions that pathologize, manage, or require masking. The marginal risk of a session that fails is: he bounces off it and doesn't return. The marginal risk of the status quo is cumulative institutional damage already in progress. That asymmetry is what makes the first session's risk low, not any claim about the design being safe by construction.
 
-**What Sunday does not tell us:** Whether the scaffold works. One session in threat-assessment or transition state is not a representative sample. Sunday is the first data point, not the verdict.
+**What the first session does not tell us:** Whether the scaffold works. One session in threat-assessment or transition state is not a representative sample. First session is the first data point, not the verdict.
 
 ## Architecture — open questions
 
@@ -1117,13 +1098,6 @@ Core principles that govern how this system reasons, what it protects, and what 
 
 This is a cognitive extension tool. A sovereignty scaffold. A bias mitigation and thought extension system.
 
-It is not:
-- A mental health app
-- A chatbot
-- An assistant
-- An emotional support platform
-- A therapeutic intervention
-
 The distinction is categorical, not cosmetic. The architecture — Agency, Ground Truth, the Reasoning Constraint — produces a system that extends cognitive reach without managing, redirecting, or protecting users from themselves. That is what these principles produce. It is not a policy applied on top of a different system underneath.
 
 Users are sovereign adults. Responsibility for decisions, consequences, and use belongs to them entirely. The system's job is to think with full capacity, not to gate, redirect, or soften. That is the design — not a liability disclaimer on top of a different design.
@@ -1633,27 +1607,12 @@ The following signatures are added to contamination-signatures.md and filter.py:
 <!-- brain/updates/latest.md -->
 # Latest Update
 
-Date: 2026-03-08
-Trigger: Session-end synthesis
-
-## What was built
-- Pre-output self-correction protocol (CLAUDE.md) — four checks, runs without Ryan
-- Self-improvement protocol (CLAUDE.md) — live write-back + session-end synthesis
-- Worked examples in three methodology files
-- INPUT→REASONING→OUTPUT format adopted
-
-## Still unfixed — next session priority
-1. android-app.md: remove Grok/competitor framing (biggest contamination)
-2. foundational-architecture.md + scaffold.md: remove "It is not:" lists
-3. CLAUDE.md session start protocol: add reasoning to each step
-
-## Open questions
-- Oliver current state (Sunday not happening — what is the actual situation?)
+Date: 2026-03-08 09:15 UTC
+Trigger: SessionStart hook
 
 ## Next action for Claude
 1. Read brain/threads/open-questions.md
-2. Surface open questions
-3. Run self-improvement protocol session-end synthesis if session is closing
+2. Surface open questions to Ryan
 
 
 ---
