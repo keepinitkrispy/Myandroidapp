@@ -1,3 +1,4 @@
 brain/__pycache__/
 .env
 *.env
+webapp/__pycache__/
