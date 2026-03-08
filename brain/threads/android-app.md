@@ -65,18 +65,6 @@ Two modes based on what he brings:
 
 The scaffold doesn't switch modes on him. He implicitly selects by what he opens with.
 
-## Secondary trajectory — epistemic agent reference model
-
-Grok's framing (2026-03-06): this system is progressing toward a minimal, forkable template for personalized epistemic agents. Key differentiators:
-
-- Three-layer decision model + adversarial validation = human-readable alternative to opaque memory hierarchies (Mem0, Letta/MemGPT, LangGraph checkpointers)
-- Git as durable storage = versioned, inspectable continuity vs. session-bound or database-only persistence (Engram, brain-mcp, Hexis)
-- Strict behavioral constraints (no hedging, immediate action, deference to human authority) = minimizes fluent false positives, preserves user agency
-
-The Android app is where those properties hit hardware. Local model + git-backed brain folder + behavioral constraints = the full stack instantiated on a phone.
-
-Eventually forkable: git repo with CLAUDE.md-style rules, brain folder skeleton, sync logic, Android app. Others adapt for their domain. Open alternative to vendor-locked black-box memory products emerging in 2026.
-
 ## Build sequence
 
 1. ~~Document direction~~ ← this file
@@ -90,7 +78,7 @@ Eventually forkable: git repo with CLAUDE.md-style rules, brain folder skeleton,
 
 ## Open questions
 
-- Does Oliver use voice or text? (First session Sunday will answer this)
+- Does Oliver use voice or text? (First session will answer this)
 - What does the launch screen look like for a 7-year-old AuDHD kid? No onboarding, no tutorial.
 - How does it handle his regulated vs. decompressing state differently?
 - Model download UX — 1.5GB first launch, needs to be honest and fast
