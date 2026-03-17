@@ -1,3 +1,2 @@
-git add .
-git commit -m "Add GitHub Actions workflow"
-git push origin main
+# This file is intentionally empty.
+# The active workflow is build.yml
