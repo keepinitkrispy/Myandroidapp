@@ -1,0 +1,57 @@
+{
+  "_comment": "Edit this file to update detection patterns without rebuilding the app.",
+  "_comment2": "Place an updated copy at: /Android/data/com.gestureai.myandroidapp/files/detection_patterns.json",
+  "_version": 3,
+  "apps": {
+    "com.tinder": {
+      "displayName": "Tinder",
+      "like":       ["Like", "Like Profile"],
+      "dislike":    ["Nope", "Pass"],
+      "superLike":  ["Super Like", "Super like"],
+      "match":      ["It's a Match", "You matched"],
+      "conversation": ["ConversationActivity", "ChatActivity", "Messages"],
+      "messageSend": ["Send", "Send message"],
+      "messageRead": ["Read", "Seen"]
+    },
+    "com.bumble.app": {
+      "displayName": "Bumble",
+      "like":       ["Yes", "Extend"],
+      "dislike":    ["No", "Pass"],
+      "superLike":  ["SuperSwipe"],
+      "match":      ["You matched", "Match!"],
+      "conversation": ["ChatActivity", "ConversationActivity"],
+      "messageSend": ["Send", "Send message"],
+      "messageRead": ["Read", "Seen"]
+    },
+    "co.hinge.app": {
+      "displayName": "Hinge",
+      "like":       ["Like", "Send a like"],
+      "dislike":    ["Pass"],
+      "superLike":  ["Rose"],
+      "match":      ["It's a Match", "You matched"],
+      "conversation": ["ConversationActivity", "ChatView"],
+      "messageSend": ["Send"],
+      "messageRead": ["Read", "Seen"]
+    },
+    "com.okcupid.okcupid": {
+      "displayName": "OkCupid",
+      "like":       ["Like", "Double Take"],
+      "dislike":    ["Pass", "No Thanks"],
+      "superLike":  ["Quickmatch"],
+      "match":      ["Mutual Like", "You both liked"],
+      "conversation": ["MessageActivity", "ConversationActivity"],
+      "messageSend": ["Send"],
+      "messageRead": ["Read", "Seen"]
+    },
+    "com.badoo.mobile": {
+      "displayName": "Badoo",
+      "like":       ["Like", "Yes"],
+      "dislike":    ["No", "Nope"],
+      "superLike":  ["Super Like"],
+      "match":      ["You both liked", "It's a match"],
+      "conversation": ["ChatActivity", "ConversationActivity"],
+      "messageSend": ["Send"],
+      "messageRead": ["Read", "Seen"]
+    }
+  }
+}

@@ -54,4 +54,40 @@ interface SwipeEventDao {
     """)
     @RewriteQueriesToDropUnusedColumns
     fun getSwipesWithViewData(pkg: String, limit: Int = 500): Flow<List<SwipeEvent>>
+
+    // ── Aborted swipe (hesitation) queries ────────────────────────────────────
+
+    /** All events where user started a swipe but reversed it */
+    @Query("SELECT * FROM swipe_events WHERE wasAborted = 1 ORDER BY timestampMs DESC LIMIT :limit")
+    fun getAbortedSwipes(limit: Int = 200): Flow<List<SwipeEvent>>
+
+    @Query("SELECT COUNT(*) FROM swipe_events WHERE wasAborted = 1")
+    suspend fun totalAbortedSwipes(): Int
+
+    /**
+     * Hesitation rate: what fraction of initiated gestures were pulled back.
+     * High rate = user is uncertain about their own preferences.
+     */
+    @Query("""
+        SELECT CAST(SUM(CASE WHEN wasAborted = 1 THEN 1 ELSE 0 END) AS FLOAT)
+             / NULLIF(COUNT(*), 0)
+        FROM swipe_events
+        WHERE appPackage = :pkg
+    """)
+    suspend fun hesitationRate(pkg: String): Float?
+
+    /**
+     * Cases where the user started to like, pulled back, then ultimately passed —
+     * "almost liked but didn't". These are the most signal-rich rows.
+     */
+    @Query("""
+        SELECT * FROM swipe_events
+        WHERE wasAborted = 1
+          AND abortedDirection = 'RIGHT'
+          AND direction = 'LEFT'
+          AND appPackage = :pkg
+        ORDER BY timestampMs DESC
+        LIMIT :limit
+    """)
+    fun getAlmostLiked(pkg: String, limit: Int = 100): Flow<List<SwipeEvent>>
 }

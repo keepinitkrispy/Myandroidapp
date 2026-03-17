@@ -6,10 +6,11 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 enum class ConversationEventType {
-    MATCH_OPENED,       // User tapped into a match conversation
-    MESSAGE_SENT,       // User sent a message
-    MESSAGE_RECEIVED,   // App showed a new incoming message
-    CONVERSATION_CLOSED // User left the conversation
+    MATCH_OPENED,        // User tapped into a match conversation
+    MESSAGE_SENT,        // User sent a message
+    MESSAGE_RECEIVED,    // App showed a new incoming message notification
+    MESSAGE_READ,        // User opened and read a received message (conversation view)
+    CONVERSATION_CLOSED  // User left the conversation
 }
 
 /**
@@ -43,10 +44,25 @@ data class ConversationEvent(
     val eventType: ConversationEventType,
 
     /**
-     * For MESSAGE_RECEIVED: millis since the previous MESSAGE_SENT in this
-     * conversation — their response time. Null for sent messages or first contact.
+     * For MESSAGE_RECEIVED: millis since the previous MESSAGE_SENT —
+     * their response time. Null for sent messages or first contact.
      */
     val responseTimeMs: Long? = null,
+
+    /**
+     * For MESSAGE_READ: millis between MESSAGE_RECEIVED and MESSAGE_READ —
+     * how long the message sat unread before you opened it.
+     * Short read latency = high interest.
+     */
+    val readLatencyMs: Long? = null,
+
+    /**
+     * For MESSAGE_READ: millis between MESSAGE_READ and the next MESSAGE_SENT —
+     * how long you took to reply after reading.
+     * Short reply latency = high interest on your end.
+     * Populated retroactively when MESSAGE_SENT fires.
+     */
+    val replyLatencyMs: Long? = null,
 
     /** Time in millis the conversation was open (for CONVERSATION_CLOSED) */
     val sessionDurationMs: Long? = null

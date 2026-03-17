@@ -1,121 +1,140 @@
 package com.gestureai.myandroidapp.tracking
 
+import android.content.Context
+import android.util.Log
+import org.json.JSONObject
+import java.io.File
+
 /**
- * Knows which accessibility events to care about for each supported dating app,
- * and what those events mean (like, dislike, super-like, match, message).
+ * Loads per-app detection patterns from JSON, not hardcoded strings.
  *
- * All string matching is case-insensitive. These lists were derived from
- * accessibility tree inspection — they'll evolve as apps update.
+ * Pattern resolution order (highest priority first):
+ *   1. /Android/data/com.gestureai.myandroidapp/files/detection_patterns.json
+ *      → user-editable override; survives app updates
+ *   2. assets/detection_patterns.json
+ *      → shipped defaults; updated with app releases
+ *
+ * To update patterns without rebuilding:
+ *   adb push detection_patterns.json \
+ *       /sdcard/Android/data/com.gestureai.myandroidapp/files/detection_patterns.json
+ *
+ * Then restart the accessibility service (toggle off/on in settings).
  */
-object AppDetector {
+class AppDetector private constructor(private val config: Map<String, AppConfig>) {
 
-    // ── Supported apps ────────────────────────────────────────────────────────
-
-    val SUPPORTED_PACKAGES = setOf(
-        "com.tinder",
-        "com.bumble.app",
-        "co.hinge.app",
-        "com.okcupid.okcupid",
-        "com.badoo.mobile"
+    data class AppConfig(
+        val displayName: String,
+        val likeSignals: List<String>,
+        val dislikeSignals: List<String>,
+        val superLikeSignals: List<String>,
+        val matchSignals: List<String>,
+        val conversationSignals: List<String>,
+        val messageSendSignals: List<String>,
+        val messageReadSignals: List<String>
     )
 
-    fun isSupported(packageName: String) = packageName in SUPPORTED_PACKAGES
+    enum class ButtonSignal { LIKE, DISLIKE, SUPER_LIKE, MESSAGE_SEND, MESSAGE_READ, NONE }
 
-    fun displayName(packageName: String) = when (packageName) {
-        "com.tinder"          -> "Tinder"
-        "com.bumble.app"      -> "Bumble"
-        "co.hinge.app"        -> "Hinge"
-        "com.okcupid.okcupid" -> "OkCupid"
-        "com.badoo.mobile"    -> "Badoo"
-        else                  -> packageName
-    }
+    // ── Public API ────────────────────────────────────────────────────────────
 
-    // ── Signal maps ───────────────────────────────────────────────────────────
-    // Content descriptions and button text that indicate a like/dislike action.
-    // These are what shows up in AccessibilityNodeInfo.contentDescription / text.
+    val supportedPackages: Set<String> get() = config.keys
 
-    private val LIKE_SIGNALS = mapOf(
-        "com.tinder"          to listOf("Like", "Like Profile"),
-        "com.bumble.app"      to listOf("Yes", "Extend"),
-        "co.hinge.app"        to listOf("Like", "Send a like"),
-        "com.okcupid.okcupid" to listOf("Like", "Double Take"),
-        "com.badoo.mobile"    to listOf("Like", "Yes")
-    )
+    fun isSupported(pkg: String) = pkg in config
 
-    private val DISLIKE_SIGNALS = mapOf(
-        "com.tinder"          to listOf("Nope", "Pass"),
-        "com.bumble.app"      to listOf("No", "Pass"),
-        "co.hinge.app"        to listOf("Pass"),
-        "com.okcupid.okcupid" to listOf("Pass", "No Thanks"),
-        "com.badoo.mobile"    to listOf("No", "Nope")
-    )
+    fun displayName(pkg: String) = config[pkg]?.displayName ?: pkg
 
-    private val SUPER_LIKE_SIGNALS = mapOf(
-        "com.tinder"          to listOf("Super Like", "Super like"),
-        "com.bumble.app"      to listOf("SuperSwipe"),
-        "co.hinge.app"        to listOf("Rose"),
-        "com.okcupid.okcupid" to listOf("Quickmatch"),
-        "com.badoo.mobile"    to listOf("Super Like")
-    )
-
-    /**
-     * Text snippets that appear in match overlay screens.
-     * Checked against full text content of window-state-changed events.
-     */
-    val MATCH_SIGNALS = mapOf(
-        "com.tinder"          to listOf("It's a Match", "You matched"),
-        "com.bumble.app"      to listOf("You matched", "Match!"),
-        "co.hinge.app"        to listOf("It's a Match", "You matched"),
-        "com.okcupid.okcupid" to listOf("Mutual Like", "You both liked"),
-        "com.badoo.mobile"    to listOf("You both liked", "It's a match")
-    )
-
-    /**
-     * Screens/activities that represent the conversation/inbox view.
-     * Matched against AccessibilityEvent.className.
-     */
-    val CONVERSATION_SCREEN_SIGNALS = mapOf(
-        "com.tinder"          to listOf("ConversationActivity", "ChatActivity", "Messages"),
-        "com.bumble.app"      to listOf("ChatActivity", "ConversationActivity"),
-        "co.hinge.app"        to listOf("ConversationActivity", "ChatView"),
-        "com.okcupid.okcupid" to listOf("MessageActivity", "ConversationActivity"),
-        "com.badoo.mobile"    to listOf("ChatActivity", "ConversationActivity")
-    )
-
-    val MESSAGE_SENT_SIGNALS = mapOf(
-        "com.tinder"          to listOf("Send", "Send message"),
-        "com.bumble.app"      to listOf("Send", "Send message"),
-        "co.hinge.app"        to listOf("Send"),
-        "com.okcupid.okcupid" to listOf("Send"),
-        "com.badoo.mobile"    to listOf("Send")
-    )
-
-    // ── Matching helpers ──────────────────────────────────────────────────────
-
-    enum class ButtonSignal { LIKE, DISLIKE, SUPER_LIKE, MESSAGE_SEND, NONE }
-
-    /**
-     * Given the text/content-description of a clicked node, classify what
-     * action just happened.
-     */
     fun classifyButtonClick(pkg: String, label: String): ButtonSignal {
+        val c = config[pkg] ?: return ButtonSignal.NONE
         val lower = label.lowercase()
         return when {
-            SUPER_LIKE_SIGNALS[pkg]?.any { lower.contains(it.lowercase()) } == true -> ButtonSignal.SUPER_LIKE
-            LIKE_SIGNALS[pkg]?.any { lower.contains(it.lowercase()) } == true       -> ButtonSignal.LIKE
-            DISLIKE_SIGNALS[pkg]?.any { lower.contains(it.lowercase()) } == true    -> ButtonSignal.DISLIKE
-            MESSAGE_SENT_SIGNALS[pkg]?.any { lower.contains(it.lowercase()) } == true -> ButtonSignal.MESSAGE_SEND
+            c.superLikeSignals.any   { lower.contains(it.lowercase()) } -> ButtonSignal.SUPER_LIKE
+            c.likeSignals.any        { lower.contains(it.lowercase()) } -> ButtonSignal.LIKE
+            c.dislikeSignals.any     { lower.contains(it.lowercase()) } -> ButtonSignal.DISLIKE
+            c.messageSendSignals.any { lower.contains(it.lowercase()) } -> ButtonSignal.MESSAGE_SEND
+            c.messageReadSignals.any { lower.contains(it.lowercase()) } -> ButtonSignal.MESSAGE_READ
             else -> ButtonSignal.NONE
         }
     }
 
     fun isMatchScreen(pkg: String, text: String): Boolean {
         val lower = text.lowercase()
-        return MATCH_SIGNALS[pkg]?.any { lower.contains(it.lowercase()) } == true
+        return config[pkg]?.matchSignals?.any { lower.contains(it.lowercase()) } == true
     }
 
     fun isConversationScreen(pkg: String, className: String): Boolean {
         val lower = className.lowercase()
-        return CONVERSATION_SCREEN_SIGNALS[pkg]?.any { lower.contains(it.lowercase()) } == true
+        return config[pkg]?.conversationSignals?.any { lower.contains(it.lowercase()) } == true
+    }
+
+    fun isMessageReadSignal(pkg: String, label: String): Boolean {
+        val lower = label.lowercase()
+        return config[pkg]?.messageReadSignals?.any { lower.contains(it.lowercase()) } == true
+    }
+
+    // ── Factory ───────────────────────────────────────────────────────────────
+
+    companion object {
+        private const val TAG = "AppDetector"
+        private const val FILENAME = "detection_patterns.json"
+
+        @Volatile
+        private var INSTANCE: AppDetector? = null
+
+        fun getInstance(context: Context): AppDetector =
+            INSTANCE ?: synchronized(this) {
+                INSTANCE ?: load(context).also { INSTANCE = it }
+            }
+
+        /** Force reload from disk — call after the user drops an override file */
+        fun reload(context: Context): AppDetector {
+            INSTANCE = null
+            return getInstance(context)
+        }
+
+        private fun load(context: Context): AppDetector {
+            val json = loadJson(context)
+            val apps = json.getJSONObject("apps")
+            val version = json.optInt("_version", 0)
+            Log.i(TAG, "Loaded detection_patterns.json v$version (${apps.length()} apps)")
+
+            val config = mutableMapOf<String, AppConfig>()
+            apps.keys().forEach { pkg ->
+                val app = apps.getJSONObject(pkg)
+                config[pkg] = AppConfig(
+                    displayName       = app.optString("displayName", pkg),
+                    likeSignals       = app.getStringList("like"),
+                    dislikeSignals    = app.getStringList("dislike"),
+                    superLikeSignals  = app.getStringList("superLike"),
+                    matchSignals      = app.getStringList("match"),
+                    conversationSignals = app.getStringList("conversation"),
+                    messageSendSignals  = app.getStringList("messageSend"),
+                    messageReadSignals  = app.getStringList("messageRead")
+                )
+            }
+            return AppDetector(config)
+        }
+
+        private fun loadJson(context: Context): JSONObject {
+            // 1. User override file in external files dir
+            val override = File(context.getExternalFilesDir(null), FILENAME)
+            if (override.exists()) {
+                try {
+                    Log.i(TAG, "Loading override from ${override.absolutePath}")
+                    return JSONObject(override.readText())
+                } catch (e: Exception) {
+                    Log.w(TAG, "Override file parse failed, falling back to assets: ${e.message}")
+                }
+            }
+            // 2. Bundled asset
+            Log.i(TAG, "Loading bundled $FILENAME from assets")
+            return context.assets.open(FILENAME).bufferedReader().use {
+                JSONObject(it.readText())
+            }
+        }
+
+        private fun JSONObject.getStringList(key: String): List<String> {
+            val arr = optJSONArray(key) ?: return emptyList()
+            return (0 until arr.length()).map { arr.getString(it) }
+        }
     }
 }

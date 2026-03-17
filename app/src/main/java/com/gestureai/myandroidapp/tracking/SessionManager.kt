@@ -29,10 +29,20 @@ class SessionManager(private val db: AppDatabase) {
     private var scrollDown: Int = 0
     private var scrollUp: Int = 0
 
+    // Gesture hesitation tracking
+    // When a gesture starts, we record which direction it went and when.
+    // If onSwipe() is never called but a new onGestureStart fires in the
+    // opposite direction, we record the first as an aborted swipe.
+    private var gestureStartDirection: SwipeDirection? = null
+    private var gestureStartTime: Long = 0L
+    private var gestureProgress: Float = 0f  // 0.0–1.0, from displacement ratio
+
     // For conversation tracking
     private var conversationMatchId: Long? = null
     private var conversationOpenedAt: Long = 0L
     private var lastMessageSentAt: Long? = null
+    private var lastMessageReceivedAt: Long? = null  // for read latency
+    private var lastReadEventId: Long? = null         // for reply latency back-fill
 
     // ── Profile view ──────────────────────────────────────────────────────────
 
@@ -71,6 +81,63 @@ class SessionManager(private val db: AppDatabase) {
     }
 
     enum class ScrollDirection { UP, DOWN }
+
+    // ── Gesture tracking (aborted swipe / hesitation detection) ──────────────
+
+    /**
+     * Called when a touch gesture begins in a detectable direction.
+     * If a previous gesture was in progress in a different direction, that
+     * earlier gesture is recorded as an aborted swipe.
+     *
+     * @param direction   Inferred swipe direction from the gesture trajectory
+     * @param progress    How far (0.0–1.0) the gesture has traveled relative to
+     *                    the threshold needed to trigger a swipe. Pass 0.0 if unknown.
+     */
+    fun onGestureStart(appPackage: String, direction: SwipeDirection, progress: Float = 0f) {
+        val prevDir = gestureStartDirection
+        if (prevDir != null && prevDir != direction) {
+            // Direction reversal — the previous gesture was abandoned
+            recordAbortedSwipe(appPackage, prevDir, gestureProgress)
+        }
+        gestureStartDirection = direction
+        gestureStartTime = System.currentTimeMillis()
+        gestureProgress = progress
+    }
+
+    /** Update how far the current gesture has traveled (call on each motion event). */
+    fun onGestureProgress(progress: Float) {
+        gestureProgress = progress
+    }
+
+    /**
+     * Called when a gesture is definitively cancelled by the app (rubber-band back).
+     * Records an aborted swipe regardless of direction change.
+     */
+    fun onGestureCancelled(appPackage: String) {
+        val dir = gestureStartDirection ?: return
+        recordAbortedSwipe(appPackage, dir, gestureProgress)
+        gestureStartDirection = null
+        gestureProgress = 0f
+    }
+
+    private fun recordAbortedSwipe(appPackage: String, abortedDir: SwipeDirection, progress: Float) {
+        val now = System.currentTimeMillis()
+        val viewId = openProfileViewId.takeIf { it != -1L }
+        scope.launch {
+            db.swipeEventDao().insert(
+                SwipeEvent(
+                    profileViewId = viewId,
+                    appPackage = appPackage,
+                    timestampMs = now,
+                    direction = SwipeDirection.ABORTED,
+                    detectionMethod = "gesture",
+                    wasAborted = true,
+                    abortedDirection = abortedDir,
+                    abortedProgress = progress.coerceIn(0f, 1f)
+                )
+            )
+        }
+    }
 
     // ── Swipe ─────────────────────────────────────────────────────────────────
 
@@ -112,6 +179,8 @@ class SessionManager(private val db: AppDatabase) {
         profileViewStart = 0L
         scrollDown = 0
         scrollUp = 0
+        gestureStartDirection = null
+        gestureProgress = 0f
     }
 
     private fun closeOpenSession(appPackage: String, swipedAway: Boolean) {
@@ -179,8 +248,22 @@ class SessionManager(private val db: AppDatabase) {
 
     fun onMessageSent(appPackage: String) {
         val now = System.currentTimeMillis()
+        val prevReadId = lastReadEventId
         lastMessageSentAt = now
+
         scope.launch {
+            // Back-fill reply latency on the most recent MESSAGE_READ event
+            if (prevReadId != null) {
+                val readEvent = db.conversationEventDao().lastReadEvent(
+                    conversationMatchId ?: return@launch
+                )
+                if (readEvent != null && readEvent.replyLatencyMs == null) {
+                    db.conversationEventDao().updateReplyLatency(
+                        readEvent.id, now - readEvent.timestampMs
+                    )
+                }
+            }
+
             db.conversationEventDao().insert(
                 ConversationEvent(
                     matchEventId = conversationMatchId,
@@ -195,6 +278,7 @@ class SessionManager(private val db: AppDatabase) {
     fun onMessageReceived(appPackage: String) {
         val now = System.currentTimeMillis()
         val responseTime = lastMessageSentAt?.let { now - it }
+        lastMessageReceivedAt = now
         scope.launch {
             db.conversationEventDao().insert(
                 ConversationEvent(
@@ -205,6 +289,27 @@ class SessionManager(private val db: AppDatabase) {
                     responseTimeMs = responseTime
                 )
             )
+        }
+    }
+
+    /**
+     * Called when the user opens a conversation and sees the received message.
+     * Records how long the message sat unread (read latency).
+     */
+    fun onMessageRead(appPackage: String) {
+        val now = System.currentTimeMillis()
+        val readLatency = lastMessageReceivedAt?.let { now - it }
+        scope.launch {
+            val id = db.conversationEventDao().insert(
+                ConversationEvent(
+                    matchEventId = conversationMatchId,
+                    appPackage = appPackage,
+                    timestampMs = now,
+                    eventType = ConversationEventType.MESSAGE_READ,
+                    readLatencyMs = readLatency
+                )
+            )
+            lastReadEventId = id
         }
     }
 
@@ -225,5 +330,7 @@ class SessionManager(private val db: AppDatabase) {
         conversationMatchId = null
         conversationOpenedAt = 0L
         lastMessageSentAt = null
+        lastMessageReceivedAt = null
+        lastReadEventId = null
     }
 }

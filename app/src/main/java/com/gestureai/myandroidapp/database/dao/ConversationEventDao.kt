@@ -19,7 +19,18 @@ interface ConversationEventDao {
     @Query("SELECT COUNT(*) FROM conversation_events WHERE eventType = :type")
     suspend fun countByType(type: ConversationEventType): Int
 
-    /** Average their response time in ms — how quickly they reply to your messages */
+    @Query("UPDATE conversation_events SET replyLatencyMs = :latencyMs WHERE id = :id")
+    suspend fun updateReplyLatency(id: Long, latencyMs: Long)
+
+    /** Most recent MESSAGE_READ event in a conversation — used to compute reply latency */
+    @Query("""
+        SELECT * FROM conversation_events
+        WHERE matchEventId = :matchId AND eventType = 'MESSAGE_READ'
+        ORDER BY timestampMs DESC LIMIT 1
+    """)
+    suspend fun lastReadEvent(matchId: Long): ConversationEvent?
+
+    /** Average THEIR response time ms — how quickly they reply to your messages */
     @Query("""
         SELECT AVG(responseTimeMs)
         FROM conversation_events
@@ -27,7 +38,27 @@ interface ConversationEventDao {
           AND responseTimeMs IS NOT NULL
           AND appPackage = :pkg
     """)
-    suspend fun avgResponseTimeMs(pkg: String): Double?
+    suspend fun avgTheirResponseTimeMs(pkg: String): Double?
+
+    /** Average YOUR read latency ms — how quickly you open received messages */
+    @Query("""
+        SELECT AVG(readLatencyMs)
+        FROM conversation_events
+        WHERE eventType = 'MESSAGE_READ'
+          AND readLatencyMs IS NOT NULL
+          AND appPackage = :pkg
+    """)
+    suspend fun avgYourReadLatencyMs(pkg: String): Double?
+
+    /** Average YOUR reply latency ms — how quickly you reply after reading */
+    @Query("""
+        SELECT AVG(replyLatencyMs)
+        FROM conversation_events
+        WHERE eventType = 'MESSAGE_READ'
+          AND replyLatencyMs IS NOT NULL
+          AND appPackage = :pkg
+    """)
+    suspend fun avgYourReplyLatencyMs(pkg: String): Double?
 
     /** Total messages you've sent across all matches */
     @Query("""
