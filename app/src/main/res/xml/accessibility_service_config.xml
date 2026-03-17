@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Declares what the SwipeTrackerService needs from the accessibility framework.
+    Keep this conservative — only request what we actually consume.
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:description="@string/accessibility_service_description"
+
+    android:accessibilityEventTypes="
+        typeWindowStateChanged|
+        typeWindowContentChanged|
+        typeViewClicked|
+        typeViewScrolled|
+        typeViewFocused"
+
+    android:accessibilityFeedbackType="feedbackGeneric"
+
+    android:accessibilityFlags="
+        flagReportViewIds|
+        flagRetrieveInteractiveWindows"
+
+    android:notificationTimeout="100"
+
+    android:canRetrieveWindowContent="true"
+    android:canRequestFilterKeyEvents="false"
+
+    android:settingsActivity="com.gestureai.myandroidapp.MainActivity" />
