@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+namespace 'com.gestureai.myandroidapp'
     compileSdk 34
 
     defaultConfig {
